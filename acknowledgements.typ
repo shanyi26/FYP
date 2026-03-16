@@ -1,6 +1,3 @@
-\chapter*{Acknowledgments}
-\addcontentsline{toc}{chapter}{Acknowledgments}
+= Acknowledgments
 
 The writer uses this section to thank all those he or she is indebted for guidance, financial or any other assistance rendered during the course of the project.
-
-
