@@ -21,6 +21,8 @@
     #author-name
   ]
   #v(2cm)
-  College of Computing and Data Science\
-  #doc-year
+  #align(center)[
+    College of Computing and Data Science\
+    #doc-year
+  ]
 ]
