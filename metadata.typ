@@ -1,6 +1,7 @@
 // Document metadata — change the following for your FYP report
-#let doc-title = "Development of Smart Contracts"
-#let fyp-code = "SCSE8338"
-#let author-name = "Harvey Specter"
-#let doc-year = "2024"
-#let degree = "Bachelor of Engineering in Computer Science"
+#let doc-title = "Learning From Videos"
+#let fyp-code = "CCDS25-0039"
+#let author-name = "Pu Fanyi"
+#let doc-year = "2026"
+#let degree = "Bachelor of Science in Data Science and Artificial Intelligence"
+#let author-matriculation-number = "U2220175K"
