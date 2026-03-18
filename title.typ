@@ -12,8 +12,7 @@
   ]
   #v(1fr)
   #align(center)[
-    Submitted in Partial Fulfilment of the Requirements\
-    for the Degree of\
+    Submitted in Partial Fulfilment of the Requirements for the Degree of\
     #degree\
     of the Nanyang Technological University
     #v(0.8cm)

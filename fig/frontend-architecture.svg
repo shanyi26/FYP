@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
+  <defs>
+    <style>
+      .title { font: 700 24px 'Times New Roman', serif; fill: #222; }
+      .label { font: 700 18px 'Times New Roman', serif; fill: #222; }
+      .text { font: 15px 'Times New Roman', serif; fill: #444; }
+      .frontend { fill: #f6f8fb; stroke: #506070; stroke-width: 2; rx: 12; ry: 12; }
+      .backend { fill: #eef5ef; stroke: #4f7a58; stroke-width: 2; rx: 12; ry: 12; }
+      .support { fill: #fff8ea; stroke: #9b7d3f; stroke-width: 2; rx: 12; ry: 12; }
+      .arrow { stroke: #506070; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .soft-arrow { stroke: #7a6c4a; stroke-width: 2.5; fill: none; marker-end: url(#softhead); stroke-dasharray: 8 6; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#506070" />
+    </marker>
+    <marker id="softhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7a6c4a" />
+    </marker>
+  </defs>
+
+  <text x="500" y="34" text-anchor="middle" class="title">Frontend Architecture</text>
+
+  <rect x="70" y="90" width="190" height="110" class="frontend" />
+  <text x="165" y="124" text-anchor="middle" class="label">Pages</text>
+  <text x="165" y="152" text-anchor="middle" class="text">Contest list</text>
+  <text x="165" y="174" text-anchor="middle" class="text">Contest detail</text>
+  <text x="165" y="196" text-anchor="middle" class="text">Problem and profile</text>
+
+  <rect x="320" y="90" width="190" height="110" class="frontend" />
+  <text x="415" y="124" text-anchor="middle" class="label">Components</text>
+  <text x="415" y="152" text-anchor="middle" class="text">Layout and navigation</text>
+  <text x="415" y="174" text-anchor="middle" class="text">Cards, forms, dialogs</text>
+  <text x="415" y="196" text-anchor="middle" class="text">Reusable UI blocks</text>
+
+  <rect x="570" y="90" width="190" height="110" class="frontend" />
+  <text x="665" y="124" text-anchor="middle" class="label">Service Layer</text>
+  <text x="665" y="152" text-anchor="middle" class="text">auth and contests APIs</text>
+  <text x="665" y="174" text-anchor="middle" class="text">Auth token handling</text>
+  <text x="665" y="196" text-anchor="middle" class="text">Request and response flow</text>
+
+  <rect x="765" y="255" width="170" height="110" class="backend" />
+  <text x="850" y="289" text-anchor="middle" class="label">Backend API</text>
+  <text x="850" y="317" text-anchor="middle" class="text">Contest endpoints</text>
+  <text x="850" y="339" text-anchor="middle" class="text">Profile endpoints</text>
+  <text x="850" y="361" text-anchor="middle" class="text">Submission data</text>
+
+  <rect x="535" y="285" width="190" height="90" class="support" />
+  <text x="630" y="317" text-anchor="middle" class="label">Types and Validation</text>
+  <text x="630" y="345" text-anchor="middle" class="text">TypeScript interfaces and Zod schemas</text>
+
+  <rect x="110" y="285" width="200" height="90" class="support" />
+  <text x="210" y="317" text-anchor="middle" class="label">Routing</text>
+  <text x="210" y="345" text-anchor="middle" class="text">React Router keeps page flow consistent</text>
+
+  <line x1="260" y1="145" x2="320" y2="145" class="arrow" />
+  <line x1="510" y1="145" x2="570" y2="145" class="arrow" />
+  <line x1="760" y1="200" x2="830" y2="255" class="arrow" />
+  <line x1="630" y1="285" x2="650" y2="200" class="soft-arrow" />
+  <line x1="260" y1="285" x2="260" y2="220" class="soft-arrow" />
+</svg>

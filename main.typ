@@ -62,11 +62,12 @@
 #counter(page).update(1)
 
 #include "abstract.typ"
-#include "acknowledgements.typ"
 
 // Table of Contents
 = Contents
 #outline(title: none, depth: 3, indent: auto)
+
+#include "acknowledgements.typ"
 
 // List of Tables
 = List of Tables

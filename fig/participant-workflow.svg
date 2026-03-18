@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220">
+  <defs>
+    <style>
+      .title { font: 700 24px 'Times New Roman', serif; fill: #222; }
+      .label { font: 600 18px 'Times New Roman', serif; fill: #222; }
+      .small { font: 14px 'Times New Roman', serif; fill: #555; }
+      .box { fill: #f6f8fb; stroke: #506070; stroke-width: 2; rx: 10; ry: 10; }
+      .arrow { stroke: #506070; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#506070" />
+    </marker>
+  </defs>
+
+  <text x="600" y="34" text-anchor="middle" class="title">Participant Workflow</text>
+
+  <rect x="35" y="78" width="150" height="72" class="box" />
+  <text x="110" y="110" text-anchor="middle" class="label">Login</text>
+  <text x="110" y="132" text-anchor="middle" class="small">Authentication</text>
+
+  <rect x="220" y="78" width="160" height="72" class="box" />
+  <text x="300" y="110" text-anchor="middle" class="label">Contest List</text>
+  <text x="300" y="132" text-anchor="middle" class="small">Browse contests</text>
+
+  <rect x="415" y="78" width="170" height="72" class="box" />
+  <text x="500" y="110" text-anchor="middle" class="label">Contest Detail</text>
+  <text x="500" y="132" text-anchor="middle" class="small">View problems and notices</text>
+
+  <rect x="620" y="78" width="155" height="72" class="box" />
+  <text x="697.5" y="110" text-anchor="middle" class="label">Problem Page</text>
+  <text x="697.5" y="132" text-anchor="middle" class="small">Read and solve</text>
+
+  <rect x="810" y="78" width="175" height="72" class="box" />
+  <text x="897.5" y="110" text-anchor="middle" class="label">Submissions</text>
+  <text x="897.5" y="132" text-anchor="middle" class="small">Track judging results</text>
+
+  <rect x="1020" y="78" width="145" height="72" class="box" />
+  <text x="1092.5" y="110" text-anchor="middle" class="label">Ranking</text>
+  <text x="1092.5" y="132" text-anchor="middle" class="small">Monitor standings</text>
+
+  <line x1="185" y1="114" x2="220" y2="114" class="arrow" />
+  <line x1="380" y1="114" x2="415" y2="114" class="arrow" />
+  <line x1="585" y1="114" x2="620" y2="114" class="arrow" />
+  <line x1="775" y1="114" x2="810" y2="114" class="arrow" />
+  <line x1="985" y1="114" x2="1020" y2="114" class="arrow" />
+</svg>
