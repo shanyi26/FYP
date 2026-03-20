@@ -1,46 +1,58 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="560" viewBox="0 0 1600 560">
   <defs>
     <style>
-      .title { font: 700 24px 'Times New Roman', serif; fill: #222; }
-      .label { font: 600 18px 'Times New Roman', serif; fill: #222; }
-      .small { font: 14px 'Times New Roman', serif; fill: #555; }
-      .box { fill: #f6f8fb; stroke: #506070; stroke-width: 2; rx: 10; ry: 10; }
-      .arrow { stroke: #506070; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .title { font: 700 28px 'Times New Roman', serif; fill: #1f1f1f; }
+      .label { font: 600 28px 'Times New Roman', serif; fill: #222; }
+      .small { font: 17px 'Times New Roman', serif; fill: #666; }
+      .box { fill: #fbfcfe; stroke: #222; stroke-width: 2.2; rx: 18; ry: 18; }
+      .arrow { stroke: #1b5e85; stroke-width: 3.5; fill: none; marker-end: url(#arrowhead); }
     </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#506070" />
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#1b5e85" />
     </marker>
   </defs>
 
-  <text x="600" y="34" text-anchor="middle" class="title">Participant Workflow</text>
+  <text x="800" y="42" text-anchor="middle" class="title">Participant Workflow</text>
 
-  <rect x="35" y="78" width="150" height="72" class="box" />
-  <text x="110" y="110" text-anchor="middle" class="label">Login</text>
-  <text x="110" y="132" text-anchor="middle" class="small">Authentication</text>
+  <rect x="40" y="80" width="250" height="120" class="box" />
+  <text x="165" y="138" text-anchor="middle" class="label">Sign Up</text>
+  <text x="165" y="170" text-anchor="middle" class="small">Create participant account</text>
 
-  <rect x="220" y="78" width="160" height="72" class="box" />
-  <text x="300" y="110" text-anchor="middle" class="label">Contest List</text>
-  <text x="300" y="132" text-anchor="middle" class="small">Browse contests</text>
+  <rect x="430" y="80" width="250" height="120" class="box" />
+  <text x="555" y="138" text-anchor="middle" class="label">Log In</text>
+  <text x="555" y="170" text-anchor="middle" class="small">Authenticate into the system</text>
 
-  <rect x="415" y="78" width="170" height="72" class="box" />
-  <text x="500" y="110" text-anchor="middle" class="label">Contest Detail</text>
-  <text x="500" y="132" text-anchor="middle" class="small">View problems and notices</text>
+  <rect x="820" y="80" width="250" height="120" class="box" />
+  <text x="945" y="138" text-anchor="middle" class="label">View Contest</text>
+  <text x="945" y="170" text-anchor="middle" class="small">Check contest details</text>
 
-  <rect x="620" y="78" width="155" height="72" class="box" />
-  <text x="697.5" y="110" text-anchor="middle" class="label">Problem Page</text>
-  <text x="697.5" y="132" text-anchor="middle" class="small">Read and solve</text>
+  <rect x="1210" y="80" width="310" height="120" class="box" />
+  <text x="1365" y="138" text-anchor="middle" class="label">Join Contest</text>
+  <text x="1365" y="170" text-anchor="middle" class="small">Enter password if required</text>
 
-  <rect x="810" y="78" width="175" height="72" class="box" />
-  <text x="897.5" y="110" text-anchor="middle" class="label">Submissions</text>
-  <text x="897.5" y="132" text-anchor="middle" class="small">Track judging results</text>
+  <rect x="1210" y="320" width="310" height="120" class="box" />
+  <text x="1365" y="378" text-anchor="middle" class="label">Problem List</text>
+  <text x="1365" y="410" text-anchor="middle" class="small">Browse available tasks</text>
 
-  <rect x="1020" y="78" width="145" height="72" class="box" />
-  <text x="1092.5" y="110" text-anchor="middle" class="label">Ranking</text>
-  <text x="1092.5" y="132" text-anchor="middle" class="small">Monitor standings</text>
+  <rect x="820" y="320" width="250" height="120" class="box" />
+  <text x="945" y="378" text-anchor="middle" class="label">Solve Problem</text>
+  <text x="945" y="410" text-anchor="middle" class="small">Read statement and code</text>
 
-  <line x1="185" y1="114" x2="220" y2="114" class="arrow" />
-  <line x1="380" y1="114" x2="415" y2="114" class="arrow" />
-  <line x1="585" y1="114" x2="620" y2="114" class="arrow" />
-  <line x1="775" y1="114" x2="810" y2="114" class="arrow" />
-  <line x1="985" y1="114" x2="1020" y2="114" class="arrow" />
+  <rect x="430" y="320" width="250" height="120" class="box" />
+  <text x="555" y="366" text-anchor="middle" class="label">Submit</text>
+  <text x="555" y="398" text-anchor="middle" class="small">Receive judging result</text>
+
+  <rect x="40" y="320" width="250" height="120" class="box" />
+  <text x="165" y="366" text-anchor="middle" class="label">View Profile</text>
+  <text x="165" y="398" text-anchor="middle" class="small">Review account information</text>
+
+  <line x1="290" y1="140" x2="430" y2="140" class="arrow" />
+  <line x1="680" y1="140" x2="820" y2="140" class="arrow" />
+  <line x1="1070" y1="140" x2="1210" y2="140" class="arrow" />
+
+  <line x1="1365" y1="200" x2="1365" y2="320" class="arrow" />
+
+  <line x1="1210" y1="380" x2="1070" y2="380" class="arrow" />
+  <line x1="820" y1="380" x2="680" y2="380" class="arrow" />
+  <line x1="430" y1="380" x2="290" y2="380" class="arrow" />
 </svg>

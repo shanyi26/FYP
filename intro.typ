@@ -3,35 +3,64 @@
 == Background
 
 Online programming contests are widely used in computing education to train problem-solving,
-algorithmic thinking, and programming fluency. Participant are welcomed to improve their coding skills in contests and get better knowledge of their abilities among all the competitors. In practice, many schools rely on external contest
-platforms, which may be convenient to use but offer limited control over contest workflows,
-branding, permissions, and feature priorities. For a university setting, this creates friction when
-the platform needs to match local teaching requirements or internal event organization.
+algorithmic thinking, and programming fluency. Participants can improve their coding skills through
+regular contest participation and gain a clearer understanding of their abilities in a competitive
+environment. In practice, however, many schools still depend on external contest platforms. While
+these platforms are convenient, they often provide limited control over workflows, branding,
+permissions, and feature priorities, which can create friction when the system needs to match local
+academic requirements or internal event organization.
 
-NanyangOJ is developed as a school-owned online judge and contest platform. The goal is not only to
-provide a place for students to submit code, but also to support the full contest experience,
-including joining contests, reading problems, viewing clarifications, tracking submissions, and
-checking rankings. Within this larger system, my work focuses on the frontend implementation for
-the participant-facing experience.
+This project aims to create a virtual judge system for the Nanyang Programming Contests series. At
+the system level, the platform is intended to help judges source contest problems from multiple
+platforms, support clarifications during contests, allow customized scoring rules, and provide a
+reliable load-balancing mechanism for contest operation. In addition to these organizational
+requirements, the system also needs to present a clear and usable participant-facing interface for
+contest entry, problem solving, submission tracking, and related contest interactions.
+
+Within this larger system, my work focuses on the frontend implementation for the participant-facing
+experience. The frontend is responsible for guiding users from authentication into contests and then
+supporting the main participation flow through contest pages, problem pages, clarifications,
+submissions, and supporting account-related views.
+\
+\
+\
+\
+\
+\
+\
+\
+\
 
 === Comparison with Existing Platforms
 
 Before finalizing the design direction, we reviewed several existing programming
 contest platforms, such as Vjudge, Kattis, and CMS. Therefore, the NanyangOJ is designed to combine the strengths of these platforms while addressing their limitations. 
+\
 
-Vjudge: Vjudge is strong in aggregation and flexibility: it connects
+
+#heading(level: 4, numbering: none)[Vjudge]
+
+Vjudge is strong in aggregation and flexibility: it connects
 problems from many existing online judges and makes it convenient to organize practice sets and
 contests from distributed problem sources. This makes it useful for training and fast contest
 arrangement, but it also means that part of the overall user experience depends on the external
 problem sources that it integrates.
+\
 
-Kattis:Kattis provides a more unified and polished contest environment. Its interface presents problems,
+
+#heading(level: 4, numbering: none)[Kattis]
+
+Kattis provides a more unified and polished contest environment. Its interface presents problems,
 submissions, standings, scoring, and language support in a highly consistent way, which is valuable
 for participants because the workflow is easy to understand and the contest experience is smooth from start to finish. At the same time, Kattis is a mature general-purpose platform whose
 structure is designed for broad use cases rather than being tailored specifically to the local
 needs, workflows, and ownership requirements of one university.
+\
 
-CMS: CMS is best understood as a contest management infrastructure. It is designed to
+
+#heading(level: 4, numbering: none)[CMS]
+
+CMS is best understood as a contest management infrastructure. It is designed to
 support many different contest types, scoring methods, timing models, and administrative workflows.
 This makes CMS powerful from an organizational perspective, but it also highlights that a
 technically capable contest system still needs an accessible participant-facing layer if it is to
@@ -46,6 +75,9 @@ terms of contest rules, participant experience, branding, and future feature exp
 NanyangOJ is positioned as a locally controlled contest platform with a clear participant workflow,
 unified frontend behavior, and close alignment between frontend design and backend-supported system
 state.
+\
+\
+\
 
 === Motivation
 
@@ -90,10 +122,11 @@ the earlier design work in Figma, I implemented or refined the main user-facing 
 - Login and signup pages
 - Contest list and contest detail pages
 - Problem page with code editor area
+- Clarification Page
 - Submission history and submission result pages
-- Ranking page
 - FAQ page
 - User profile page
+- Theme Design
 
 In addition to page implementation, I also worked on the frontend architecture needed to support
 these pages, including routing, API abstraction, authentication token handling, shared UI
@@ -113,12 +146,15 @@ browser-only contest exit mechanism with a server-backed workflow.
     before joining.],
     [Contest detail], [Contest overview], [Inspect problems, clarifications, and contest-level
     actions in one place.],
+    [Clarification panel], [Communication], [Receive jury announcements and allow participants to
+    submit clarification questions during the contest.],
     [Problem page], [Problem solving], [Read the statement, write code, and prepare submissions
     during a contest.],
     [Submission views], [Progress tracking], [Review judging results and inspect previous
     attempts.],
-    [Ranking, FAQ, profile], [Support pages], [Monitor standings, access guidance, and check
-    personal account information.],
+    [Ranking page], [Performance feedback], [View the ranking and performance of individual participant among all contestants in a contest.],
+    [FAQ and profile], [Support pages], [Access platform guidance and check personal account
+    information.],
   ),
   caption: [Main participant-facing pages and their functions],
 )
@@ -133,22 +169,92 @@ typography, page hierarchy, and navigation patterns across the application. Comm
 elements such as the sidebar, page containers, cards, and form layouts were planned before coding,
 which reduced uncertainty during implementation and made the later React development more direct.
 
-The contest-related pages were designed to support a focused workflow. The contest page presents the
+#let figma-shot(path) = image(path, width: 100%)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 2,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/Log In.png"),
+    figma-shot("fig/Contest (1)/Sign Up.png"),
+  ),
+  caption: [Figma designs for authentication pages],
+)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 1,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/Contest Page.png"),
+  ),
+  caption: [Figma design for the contest overview page],
+)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 2,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/Problem.png"),
+    figma-shot("fig/Contest (1)/Problem Page.png"),
+  ),
+  caption: [Figma designs for problem list and problem-solving pages],
+)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 1,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/Submission Page.png"),
+  ),
+  caption: [Figma design for the submission page],
+)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 2,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/Pass.png"),
+    figma-shot("fig/Contest (1)/Fail.png"),
+  ),
+  caption: [Figma designs for submission result feedback],
+)
+
+#figure(
+  kind: image,
+  grid(
+    columns: 2,
+    gutter: 0.6cm,
+    figma-shot("fig/Contest (1)/FAQ.png"),
+    figma-shot("fig/Contest (1)/My Account.png"),
+  ),
+  caption: [Figma designs for supporting participant pages],
+)
+
+The contest-related pages were designed to support a main workflow. The contest page presents the
 active contest together with its problem list and clarification area, so that participants can
 access both task information and announcements in one place. The problem page follows a split
 layout that separates the statement from the code editor section, allowing participants to read and
 solve problems efficiently. Submission pages were designed to make status, score, and submitted
-code easy to inspect, while the ranking and profile pages provide contest feedback and user account
+code easy to inspect, while the FAQ and profile pages provide platform guidance and user account
 information in a familiar layout.
 
 == Frontend Technology Choices
 
-The frontend is implemented with React and TypeScript. React Router is used to define navigation
-between pages, while Material UI provides a consistent component base for layout, forms, dialogs,
-and tables. The project also uses a centralized service layer for API access and Zod schemas for
-runtime validation of backend responses. This combination improves maintainability because the page
-components can focus on interaction and presentation, while request logic and response parsing are
-handled in a single place.
+The frontend is implemented as a React and TypeScript single-page application and built with Vite.
+React Router is used to define both participant and administrative routes, while Material UI and
+Emotion provide the main design system, component styling, and theme support across the interface.
+\
+For backend communication, the project uses Axios through a centralized API service layer with
+request and response interceptors for token handling and error processing. Zod schemas are used
+alongside TypeScript types to validate backend payloads at runtime, which helps reduce hidden
+integration mismatches. In feature-specific areas, the frontend also uses Monaco Editor for code
+submission and React Markdown with `remark-gfm` and syntax highlighting for rendering problem
+content.
 
 #figure(
   table(
@@ -156,15 +262,25 @@ handled in a single place.
     inset: 8pt,
     stroke: luma(180),
     [*Technology*], [*Category*], [*Purpose in the project*],
+    [Vite], [Build tool], [Provides the development server and frontend build pipeline for the React
+    application.],
     [React], [UI framework], [Implements page-based interfaces through reusable components and
     supports a consistent participant experience.],
     [TypeScript], [Language], [Adds static typing so frontend logic, props, and API-facing types
     remain easier to maintain.],
     [Material UI], [Component library], [Provides common UI elements such as forms, dialogs, cards,
     and tables with a consistent design base.],
+    [Emotion], [Styling], [Supports theme-aware styling and integrates with Material UI for custom
+    interface design.],
     [React Router], [Routing], [Defines navigation between contest pages and keeps the participant
     workflow structured.],
+    [Axios], [HTTP client], [Handles API requests through a shared service layer with centralized
+    authentication and error handling.],
     [Zod], [Validation], [Validates backend responses at runtime to catch schema mismatches early.],
+    [Monaco Editor], [Code editor], [Provides the in-browser programming editor used on the problem
+    submission page.],
+    [React Markdown], [Content rendering], [Renders problem statements and rich text content in the
+    frontend interface.],
   ),
   caption: [Technology stack used in the frontend implementation],
 )
@@ -175,25 +291,26 @@ same authenticated data flow. Instead of embedding fetch logic separately in eve
 frontend uses a shared API abstraction that exposes contest, authentication, submission, and jury
 operations with a consistent interface.
 
-This separation of concerns is shown in Figure @fig:frontend-architecture.
+This separation of concerns is shown in Figure 8
 
 #figure(
-  image("fig/frontend-architecture.svg", width: 100%),
-  caption: [High-level frontend architecture and its relationship with the backend],
+  image("fig/frontend tech.png", width: 100%),
+  caption: [Frontend technology structure used in the implementation],
 ) <fig:frontend-architecture>
 
 = Implementation of Core Participant Features
 
 == Routing and Navigation
 
-The main participant routes are defined in the application router. The route `/contest` leads to
-the contest list page, `/contest/:contestId` opens the contest detail page, and
-`/contest/:contestId/problem/:problemId` leads to an individual problem page. Additional routes are
-defined for ranking, submissions, FAQ, and profile. This route structure mirrors the intended
-contest workflow and helps keep page responsibilities clear.
-
-Figure @fig:route-structure illustrates the main route relationships in the participant-facing
+The frontend uses React Router to organize the participant workflow into clear page-level routes.
+The route `/contest` displays the contest list, `/contest/:contestId` opens the selected contest,
+and `/contest/:contestId/problem/:problemId` leads to the corresponding problem page. Additional
+routes are used for ranking, submissions, FAQ, and profile pages. This routing structure supports a
+coherent participant journey and helps separate the responsibilities of different pages in the
 frontend.
+
+Figure @fig:route-structure summarizes the main participant-facing routes. Auxiliary routes such as
+password recovery and FAQ question submission are omitted here for clarity.
 
 #figure(
   image("fig/route-structure.svg", width: 100%),
@@ -204,23 +321,40 @@ The sidebar and top-level layout provide a consistent navigation frame across th
 reduces context switching for users, because the overall page structure stays stable while the main
 content changes according to the current task.
 
+== Authentication Pages
+
+Before entering contests, participants first interact with the authentication pages. The login page
+provides a simple sign-in form with fields for username or email together with password input. On a
+successful login, the user is redirected to the application root, which then leads into the main
+participant area.
+
+The registration page is designed specifically for NTU users. It collects a username, an NTU email
+address, a password, and a confirmation password. The form performs frontend validation on empty
+fields, email format, password rules, and password confirmation, and it also shows a password
+strength indicator during input. After successful registration, the user is redirected to the login
+page to continue with authentication.
+
+In addition to these main entry pages, the router also includes password-recovery routes. Although
+they are not part of the core contest workflow, they help complete the account access flow for the
+frontend.
+
 == Contest List and Contest Detail Pages
 
-The contest list page is responsible for presenting active and upcoming contests. It retrieves
-contest data from the centralized API layer and renders each contest with its title, timing
-information, and current status. To make contest timing easier to understand, the page computes
-countdown labels such as whether a contest is upcoming, ongoing, or ended. This helps users quickly
-decide which contest they can enter.
+The contest list page presents the contests currently available to participants. It retrieves
+contest data through the centralized API layer and renders each entry with its title, start time,
+end time, and status. To make contest timing easier to understand, the page computes live countdown
+labels and status indicators such as upcoming, ongoing, ended, or exited. It also supports the
+contest join flow through a password dialog before navigating the user into the selected contest.
 
 The contest detail page fetches contest problems and visible clarifications using the contest ID
 from the current route. The page combines these data sources into a single view so that participants
 can review problems and contest announcements without leaving the contest context. It also supports
-submitting clarification questions and updates the clarification list dynamically when new
-information is received from the server stream.
+submitting clarification questions, including optional problem-specific questions, and updates the
+clarification list dynamically when new information is received from the contest stream.
 
-The contest header component displays core contest metadata such as title and timing information. It
-also provides contest-level actions, including the contest exit flow that was improved in the latest
-revision of the frontend.
+The contest header component displays core contest metadata such as the contest title, start time,
+and end time. It also provides contest-level actions, including an exit flow that sends a leave
+request to the backend before returning the participant to the contest list.
 
 == Problem Solving and Submission Views
 
@@ -233,12 +367,11 @@ review previous submissions, inspect individual submission results, and check ju
 feedback loop is important in a contest environment because users often iterate on solutions and
 need to understand the status of each attempt clearly.
 
-== Ranking, FAQ, and Profile Pages
+== FAQ and Profile Pages
 
 Beyond the core contest workflow, the participant interface includes supporting pages that improve
-usability. The ranking page presents standings information so that participants can monitor their
-relative performance. The FAQ page provides quick access to platform guidance and common questions.
-The profile page allows users to review their account information within the same unified interface
+usability. The FAQ page provides quick access to platform guidance and common questions, while the
+profile page allows users to review their account information within the same unified interface
 style used by the rest of the application.
 
 Although these pages serve different purposes, they share a common design language and are
@@ -273,7 +406,7 @@ and testing.
     [`auth` module], [Authentication and identity], [Handles login, registration, and current-user
     retrieval through the `/me` endpoint and related auth requests.],
     [`contests` module], [Contest operations], [Provides contest metadata, participant actions,
-    problems, clarifications, submissions, and ranking access through grouped contest methods.],
+    problems, clarifications, and submissions through grouped contest methods.],
     [`system` module], [System status], [Exposes jury-oriented system status data needed for
     administrative monitoring features.],
     [`types/*` schemas], [Validation and typing], [Define TypeScript and Zod-based data structures

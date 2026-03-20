@@ -4,7 +4,7 @@ Nanyang OJ is an online programming contest platform intended for school use. Th
 managed by the school, so that contest configuration, participant experience, and future extensions can be controlled by school instead of external platforms.
 
 My contribution focuses on the participant-facing frontend. I designed the initial user interface and user experience based on the requirements using Figma and implemented the main React pages for contest participation, including login and signup,
-contest list and contest detail pages, problem pages, submission views, ranking, FAQ, and user
+contest list and contest detail pages, problem pages, submission views, FAQ, and user
 profile. The frontend is built with TypeScript, React, and Material UI. It communicates with
 the backend through API service layer which handles authentication, request
 structure, and response validation.

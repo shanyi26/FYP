@@ -34,21 +34,21 @@
 }
 
 #show heading.where(level: 2): it => {
-  v(1em)
+  v(2.1em)
   text(size: 14pt, weight: "bold")[
     #if it.numbering != none [#counter(heading).display(it.numbering) #h(0.5em)]
     #it.body
   ]
-  v(0.5em)
+  v(1.2em)
 }
 
 #show heading.where(level: 3): it => {
-  v(0.8em)
+  v(1.4em)
   text(size: 12pt, weight: "bold")[
     #if it.numbering != none [#counter(heading).display(it.numbering) #h(0.5em)]
     #it.body
   ]
-  v(0.4em)
+  v(0.8em)
 }
 
 // ── Cover page ──
