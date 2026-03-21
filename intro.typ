@@ -291,7 +291,7 @@ same authenticated data flow. Instead of embedding fetch logic separately in eve
 frontend uses a shared API abstraction that exposes contest, authentication, submission, and jury
 operations with a consistent interface.
 
-This separation of concerns is shown in Figure 8
+This separation of concerns is shown in Figure 8.
 
 #figure(
   image("fig/frontend tech.png", width: 100%),
@@ -302,12 +302,11 @@ This separation of concerns is shown in Figure 8
 
 == Routing and Navigation
 
-The frontend uses React Router to organize the participant workflow into clear page-level routes.
-The route `/contest` displays the contest list, `/contest/:contestId` opens the selected contest,
-and `/contest/:contestId/problem/:problemId` leads to the corresponding problem page. Additional
-routes are used for ranking, submissions, FAQ, and profile pages. This routing structure supports a
-coherent participant journey and helps separate the responsibilities of different pages in the
-frontend.
+The frontend uses React Router to organize the main participant flow into page-level routes. The
+route `/contest` shows the contest list, `/contest/:contestId` opens a selected contest, and
+`/contest/:contestId/problem/:problemId` leads to the corresponding problem page. Separate routes
+are also used for ranking, submissions, FAQ, and profile pages. This makes the overall structure
+easier to follow and keeps each page focused on a clear role.
 
 Figure @fig:route-structure summarizes the main participant-facing routes. Auxiliary routes such as
 password recovery and FAQ question submission are omitted here for clarity.
@@ -317,13 +316,53 @@ password recovery and FAQ question submission are omitted here for clarity.
   caption: [Main route structure of the participant-facing frontend],
 ) <fig:route-structure>
 
-The sidebar and top-level layout provide a consistent navigation frame across the application. This
-reduces context switching for users, because the overall page structure stays stable while the main
-content changes according to the current task.
+The sidebar and top-level layout stay consistent across the application. As a result, users can
+move between pages without feeling that they have entered a different part of the system each time.
+
+From the implementation side, this routing structure also keeps the frontend easier to manage. Each
+page handles its own task, but still fits into one continuous workflow. A participant can move from
+contest discovery to problem solving and then to submission review without leaving the same
+application frame.
 
 The screenshots shown in the following frontend sections use sample data for demonstration. They do
 not represent fully connected live contest data, because backend data transmission was still not
 fully ready at the time these interface captures were taken.
+
+== Participant Workflow
+
+From the participant's point of view, the frontend should feel like one continuous flow rather than
+a set of unrelated pages. A typical user journey starts with authentication, where the user logs in
+or registers with an NTU email account. After entering the system, the participant can browse the
+available contests, check their timing and status, and join the intended contest if access is
+allowed.
+
+Once inside a contest, the participant can move between the contest overview and the problem pages.
+The contest page acts as a central hub by showing the available problems together with the
+clarification area, while the problem page provides the space for reading the statement, writing
+code, and preparing a submission. After a solution is submitted, the user can inspect the judging
+result and, if necessary, return to the same problem for another attempt.
+
+In practice, this workflow is not strictly linear. During a contest, participants often move back
+and forth between problems, submissions, rankings, and clarification messages. For that reason, the
+frontend was designed to keep navigation stable and predictable, so that users can switch tasks
+without losing their sense of context.
+
+== Reusable Components and Shared Layout
+
+Another part of the frontend work was to keep the implementation reusable instead of building every
+page from scratch. Although the participant-facing pages serve different purposes, many of them
+still need the same basic structure, such as a stable sidebar layout, page headers, card
+containers, form controls, dialogs, and status areas. Reusing these patterns made the frontend
+easier to extend and also helped the interface stay visually consistent.
+
+This matters because the system contains several pages that differ in content but feel similar in
+use. Contest pages, problem pages, submission pages, FAQ, and profile pages all sit inside the same
+application frame. Shared components and layout patterns reduce the chance that these pages drift
+into unrelated designs over time.
+
+Reusable components also reduce duplication. When a visual or behavioral improvement is made to a
+shared component, the same improvement can appear across multiple pages instead of being
+reimplemented repeatedly.
 
 == Authentication Pages
 
@@ -343,6 +382,11 @@ domains provided by the registration form. Before a user logs in successfully, c
 other protected participant content are not available through authenticated requests. If the
 frontend detects an invalid or missing login state while requesting protected data, it redirects the
 user back to the login page.
+
+These pages matter because they are the user's first contact with the platform. If login and
+registration already feel confusing, the rest of the contest flow becomes harder to trust. For that
+reason, the authentication pages were treated not only as security requirements, but also as part
+of the general usability of the frontend.
 
 #figure(
   kind: image,
@@ -376,6 +420,11 @@ submitting clarification questions, including optional problem-specific question
 clarification list dynamically when new information is received from the contest stream. In
 addition, the contest exit flow is confirmed through a dialog, and once a participant leaves the
 contest, the interface reflects that the contest can no longer be re-entered.
+
+These two contest pages work together as the bridge between general browsing and active
+participation. The list page helps users understand what is available and what state each contest is
+in, while the detail page shifts attention to the actual contest tasks. Keeping these roles
+separate makes the overall flow easier to understand.
 
 #figure(
   kind: image,
@@ -429,6 +478,11 @@ API and then navigates directly to the corresponding submission result page. In 
 the same page also exposes editing controls for adding, reordering, updating, and deleting problem
 sections, so the page can support both participation and content maintenance.
 
+This page is one of the most important parts of the participant workflow because it brings reading,
+coding, and submission preparation into the same place. Instead of forcing the user to move between
+separate screens for the statement and the editor, the frontend keeps these tasks close together.
+In practice, the page functions more like a working area than a static problem description.
+
 #figure(
   kind: image,
   image("fig/problem/problem4.png", width: 100%),
@@ -459,13 +513,19 @@ Submission-related pages provide visibility into user progress during the contes
 page first loads the active contests and then fetches the submissions for the selected contest. It
 shows the submission records in a table view. The page also includes filtering functions, allowing
 the user to narrow the list by problem, user, language, and judging status. From the submission
-page shown in Figure 21, the user can click the `Review` button to open the result page shown in
-Figure 20.
+list, the user can click the `Review` button to open the corresponding result page for a selected
+attempt.
 
 On the result page, the user can immediately see whether the solution passed or failed. The page
 also provides two follow-up actions: `Try Again`, which returns the user to the corresponding
 problem page, and `Back to Submissions`, which exits the result view and returns to the submission
 list.
+
+These submission views are useful not only as records of past attempts, but also as part of the
+feedback loop during a contest. After submitting code, the participant can quickly inspect the
+result, decide whether another attempt is needed, and return to the problem with minimal
+interruption. This matches the iterative nature of programming contests, where users often submit,
+review, revise, and submit again.
 
 #figure(
   kind: image,
@@ -475,9 +535,9 @@ list.
 
 == FAQ and Profile Pages
 
-Beyond the core contest workflow, the participant interface includes supporting pages that improve
-usability. The FAQ page provides quick access to platform guidance and common questions. It also includes an `Ask a Question` entry point, which allows participants
-to write and submit a question to the jury.
+Beyond the core contest workflow, the participant interface also includes supporting pages. The FAQ
+page provides quick access to platform guidance and common questions. It also includes an `Ask a
+Question` entry point, which allows participants to write and submit a question to the jury.
 
 The profile page allows users to review their account information within the same unified interface
 style used by the rest of the application. In addition to username and email, the profile page also
@@ -489,6 +549,11 @@ Although these pages serve different purposes, they share a common design langua
 implemented through the same routing and layout system. This consistency is important because it
 makes the platform feel like a single integrated product rather than a collection of unrelated
 screens.
+
+Including these supporting pages makes the platform feel more complete. A contest system is not used
+only for solving problems, but also for handling practical questions, account information, and
+general guidance. Keeping these functions inside the same frontend environment means participants do
+not need to leave the platform to deal with common issues.
 
 #figure(
   kind: image,
@@ -504,6 +569,34 @@ screens.
 
 = API Integration and Recent Improvements
 
+== Frontend Beautification
+
+Besides implementing the core functions and connecting the frontend to the backend, I also spent
+time improving the visual presentation of the interface. These changes were not meant to add new
+functions, but to make the platform easier to read, more consistent across pages, and more
+comfortable to use during a contest.
+
+=== Theme and Typography
+
+One part of this work was theme and typography support. The frontend allows users to switch between
+light and dark themes, which makes the interface more flexible under different viewing conditions.
+I also added adjustable text sizing so that dense pages are easier to read. This is especially
+helpful on pages such as problem statements, submission records, and FAQ content.
+
+=== Uniform Page Structure
+
+Another improvement was the more consistent use of card-based layouts and shared page structure.
+Instead of letting each page drift into its own visual style, I tried to keep a common arrangement
+for headers, content areas, metadata blocks, and supporting controls. This makes the contest pages,
+problem pages, submission pages, FAQ page, and profile page feel more related to one another.
+
+=== Consistency and User Experience
+
+Although these changes are mostly visual, they still matter in practice. In a contest system,
+participants move frequently between different pages, so an inconsistent layout can make the
+experience feel fragmented even when the functions work correctly. A more uniform interface makes
+the page hierarchy clearer and the overall workflow smoother.
+
 == Centralized API Service Layer
 
 All frontend API communication is handled through a centralized service module. This module defines
@@ -517,6 +610,14 @@ contest detail page can request the data they need through high-level methods, w
 details such as path formatting, HTTP methods, and validation are hidden inside the shared service
 layer. The same structure also makes it easier to maintain a mock API mode for frontend development
 and testing.
+
+From an implementation perspective, this service layer also makes the frontend easier to maintain as
+the project grows. When an API path or response shape changes, the adjustment can be handled in a
+small number of shared modules instead of being scattered across many pages. This is particularly
+useful in a contest system, because many views depend on related data such as contest metadata,
+participant state, problem information, and submission records. A centralized API layer therefore
+helps keep the frontend codebase more organized and reduces the risk of inconsistent request logic
+between pages.
 
 #figure(
   table(
@@ -546,44 +647,49 @@ was corrected by changing the request to the backend's current `/me` endpoint. C
 frontend types were also updated to reflect actual backend fields, including `left_contest` and the
 `participants` response structure.
 
-These changes are important because an online contest system depends on accurate state handling.
-When frontend routes or types drift away from the backend, the interface may still render but the
-behavior becomes unreliable. By aligning the API layer with the current backend, the frontend now
-handles contest and profile data more correctly and with less hidden inconsistency.
+These changes matter because an online contest system depends on accurate state handling. When
+frontend routes or types drift away from the backend, the interface may still render, but the
+behavior becomes unreliable. Aligning the API layer with the current backend reduced this kind of
+hidden inconsistency.
 
-== Improvement of the Contest Exit Flow
-
-Another important improvement was the contest exit workflow. Earlier frontend logic relied on local
-browser storage to remember whether a participant had exited a contest. This was only a local state
-approximation and could easily become inconsistent after a refresh, a device change, or a backend
-state update.
-
-The contest exit flow was therefore revised to use the backend's leave endpoint directly. The
-frontend now sends a real contest leave request and uses the backend's `left_contest` field as the
-source of truth when rendering contest status. On the contest list page, a contest that has been
-left is shown with an `Exited` state and the join action is disabled accordingly. This change makes
-the frontend behavior consistent with backend data and better reflects the actual contest
-participation state of the user.
+This alignment work was not limited to a single page. It required checking how the frontend
+interpreted backend data across several participant-facing features, including profile information,
+contest state, and contest-related lists. Doing this reduced the gap between what the frontend
+assumed and what the backend actually returned.
 
 == Validation and Stability
 
-After the API alignment work, the updated frontend was verified through local build and targeted lint
-checks on the affected files. The revised pages and service layer compiled successfully, indicating
-that the integration changes were consistent with the current frontend codebase. This validation is
-especially important in a typed React project because interface-level mismatches can otherwise
-propagate across multiple pages.
+After these integration and interface changes, the frontend was checked through local build and
+type-level validation to confirm that the updated code remained consistent. This step is important
+in a React and TypeScript project because changes in one shared type, API method, or page-level
+prop can easily affect several other parts of the application.
+
+The validation process was not only about confirming that the project could still compile. It also
+helped check whether the updated pages remained compatible with the shared service layer, routing
+structure, and reusable components already used across the frontend. In this kind of project,
+stability means that improvements should not create new inconsistencies elsewhere in the user flow.
+
+This is especially relevant for a contest platform, where users move quickly between authentication,
+contest pages, problem pages, submissions, and supporting views. If one part of the frontend falls
+out of sync with another, the result may not always be an obvious crash, but rather a confusing
+workflow or incorrect interface state. For that reason, validation and stability checking formed an
+important part of the frontend work alongside feature implementation and visual refinement.
 
 = Conclusion
 
-This project contributes the participant-facing frontend of NanyangOJ, a school-owned contest
-platform designed to support local academic and competitive programming activities. My work covered
-both design and implementation: I first defined the participant interface in Figma, and then
-implemented the main pages and frontend architecture needed to support the contest workflow in
-React.
+This project focuses on the participant-facing frontend of NanyangOJ, a school-owned online judge
+intended to support local programming contests and training activities. My work covered both design
+and implementation. I first planned the main interface structure in Figma, and then implemented the
+core participant pages in React and TypeScript, including authentication, contest access, problem
+solving, submissions, FAQ, and profile-related views.
 
-The recent improvements further strengthened the reliability of the frontend by aligning API usage
-with the current backend and by replacing local-only contest exit logic with a proper backend-driven
-process. These changes move the platform closer to a stable and maintainable state for real usage.
-Future work can continue to expand backend-supported features and further connect currently
-simplified pages, but the implemented frontend already provides a solid foundation for a coherent
-school-managed online contest experience.
+Beyond page implementation, the project also involved building the frontend structure needed to
+support these functions in a maintainable way. This included routing, shared components, theme and
+layout consistency, and a centralized API layer for communicating with the backend. In the later
+stages of the work, I also focused on improving frontend reliability by aligning requests and data
+handling more closely with the current backend behavior.
+
+Taken together, these parts form a usable foundation for the participant side of the platform. The
+system is still not fully complete, and some features can be extended further in future work,
+especially as backend support becomes more mature. Even so, the current frontend already shows how
+the platform can provide a more coherent and school-controlled contest experience for students.
