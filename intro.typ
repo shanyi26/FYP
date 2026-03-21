@@ -321,6 +321,10 @@ The sidebar and top-level layout provide a consistent navigation frame across th
 reduces context switching for users, because the overall page structure stays stable while the main
 content changes according to the current task.
 
+The screenshots shown in the following frontend sections use sample data for demonstration. They do
+not represent fully connected live contest data, because backend data transmission was still not
+fully ready at the time these interface captures were taken.
+
 == Authentication Pages
 
 Before entering contests, participants first interact with the authentication pages. The login page
@@ -334,6 +338,24 @@ fields, email format, password rules, and password confirmation, and it also sho
 strength indicator during input. After successful registration, the user is redirected to the login
 page to continue with authentication.
 
+Users are expected to register with an NTU student email address, using the supported NTU email
+domains provided by the registration form. Before a user logs in successfully, contest data and
+other protected participant content are not available through authenticated requests. If the
+frontend detects an invalid or missing login state while requesting protected data, it redirects the
+user back to the login page.
+
+#figure(
+  kind: image,
+  image("fig/signuplogin/sign up1.jpeg", width: 100%),
+  caption: [Login page],
+)
+
+#figure(
+  kind: image,
+  image("fig/signuplogin/sign up2.jpeg", width: 100%),
+  caption: [Sign up page],
+)
+
 In addition to these main entry pages, the router also includes password-recovery routes. Although
 they are not part of the core contest workflow, they help complete the account access flow for the
 frontend.
@@ -344,28 +366,112 @@ The contest list page presents the contests currently available to participants.
 contest data through the centralized API layer and renders each entry with its title, start time,
 end time, and status. To make contest timing easier to understand, the page computes live countdown
 labels and status indicators such as upcoming, ongoing, ended, or exited. It also supports the
-contest join flow through a password dialog before navigating the user into the selected contest.
+contest join flow through a password dialog, so participants must enter the correct contest password
+before they can enter the selected contest.
 
 The contest detail page fetches contest problems and visible clarifications using the contest ID
 from the current route. The page combines these data sources into a single view so that participants
 can review problems and contest announcements without leaving the contest context. It also supports
 submitting clarification questions, including optional problem-specific questions, and updates the
-clarification list dynamically when new information is received from the contest stream.
+clarification list dynamically when new information is received from the contest stream. In
+addition, the contest exit flow is confirmed through a dialog, and once a participant leaves the
+contest, the interface reflects that the contest can no longer be re-entered.
+
+#figure(
+  kind: image,
+  image("fig/contest page/contest1.png", width: 100%),
+  caption: [Show all the contests available to participants],
+)
+
+#figure(
+  kind: image,
+  image("fig/contest page/contest2.png", width: 100%),
+  caption: [Password dialog shown when a participant joins a contest],
+)
+
+#figure(
+  kind: image,
+  image("fig/contest page/contest5.png", width: 100%),
+  caption: [Contest view showing all problems and the clarification section],
+)
+
+#figure(
+  kind: image,
+  image("fig/contest page/contest3.png", width: 100%),
+  caption: [Confirmation page for ending a contest],
+)
+
+#figure(
+  kind: image,
+  image("fig/contest page/contest4.png", width: 100%),
+  caption: [Contest page after ending the contest, where re-entry is no longer allowed],
+)
 
 The contest header component displays core contest metadata such as the contest title, start time,
 and end time. It also provides contest-level actions, including an exit flow that sends a leave
 request to the backend before returning the participant to the contest list.
 
-== Problem Solving and Submission Views
+== Problem Page
 
-The problem page is designed to support direct contest participation. It presents the problem
-statement together with an editor area where participants can prepare and submit solutions. This
-layout reduces unnecessary navigation and keeps the relevant information on the same screen.
+The problem page is implemented as a contest-scoped view that reads both `contestId` and
+`problemId` from the route before requesting the corresponding problem data from the backend. After
+the data is loaded, the page constructs a structured presentation from the returned fields. The
+problem description is rendered as a main content section, and any sample inputs and outputs
+received from the API are grouped into a dedicated sample section so that participants can inspect
+examples without leaving the page.
 
-Submission-related pages provide visibility into user progress during the contest. Participants can
-review previous submissions, inspect individual submission results, and check judging outcomes. This
-feedback loop is important in a contest environment because users often iterate on solutions and
-need to understand the status of each attempt clearly.
+The header of the page displays the problem title together with its time limit and memory limit.
+Below the statement, the page includes an integrated code editor that supports multiple languages,
+including C, C++, Java, Python, and Go. The selected language and draft code are stored locally per
+problem, so the participant can switch languages or return to the same problem without immediately
+losing work. When the user submits code, the page sends the solution through the contest submission
+API and then navigates directly to the corresponding submission result page. In jury or root mode,
+the same page also exposes editing controls for adding, reordering, updating, and deleting problem
+sections, so the page can support both participation and content maintenance.
+
+#figure(
+  kind: image,
+  image("fig/problem/problem4.png", width: 100%),
+  caption: [Problem page],
+)
+
+#figure(
+  kind: image,
+  image("fig/problem/problem1.jpeg", width: 100%),
+  caption: [Detailed view of a selected problem],
+)
+
+#figure(
+  kind: image,
+  image("fig/problem/problem2.png", width: 100%),
+  caption: [Code editor],
+)
+
+#figure(
+  kind: image,
+  image("fig/problem/problem3.png", width: 100%),
+  caption: [Result page],
+)
+
+== Submission Views
+
+Submission-related pages provide visibility into user progress during the contest. The submissions
+page first loads the active contests and then fetches the submissions for the selected contest. It
+shows the submission records in a table view. The page also includes filtering functions, allowing
+the user to narrow the list by problem, user, language, and judging status. From the submission
+page shown in Figure 21, the user can click the `Review` button to open the result page shown in
+Figure 20.
+
+On the result page, the user can immediately see whether the solution passed or failed. The page
+also provides two follow-up actions: `Try Again`, which returns the user to the corresponding
+problem page, and `Back to Submissions`, which exits the result view and returns to the submission
+list.
+
+#figure(
+  kind: image,
+  image("fig/submission/submission1.png", width: 100%),
+  caption: [Submission page],
+)
 
 == FAQ and Profile Pages
 
