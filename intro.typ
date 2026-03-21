@@ -476,14 +476,31 @@ list.
 == FAQ and Profile Pages
 
 Beyond the core contest workflow, the participant interface includes supporting pages that improve
-usability. The FAQ page provides quick access to platform guidance and common questions, while the
-profile page allows users to review their account information within the same unified interface
-style used by the rest of the application.
+usability. The FAQ page provides quick access to platform guidance and common questions. It also includes an `Ask a Question` entry point, which allows participants
+to write and submit a question to the jury.
+
+The profile page allows users to review their account information within the same unified interface
+style used by the rest of the application. In addition to username and email, the profile page also
+adds fields for matric number and phone number. These fields are useful for practical contest
+administration, because they make it easier to contact participants and arrange prize distribution
+when necessary.
 
 Although these pages serve different purposes, they share a common design language and are
 implemented through the same routing and layout system. This consistency is important because it
 makes the platform feel like a single integrated product rather than a collection of unrelated
 screens.
+
+#figure(
+  kind: image,
+  image("fig/faq and profile/FAQ.png", width: 100%),
+  caption: [FAQ page],
+)
+
+#figure(
+  kind: image,
+  image("fig/faq and profile/profile page.png", width: 100%),
+  caption: [Profile page],
+)
 
 = API Integration and Recent Improvements
 
