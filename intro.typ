@@ -173,8 +173,8 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 2,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/Log In.png"),
-    figma-shot("fig/Contest (1)/Sign Up.png"),
+    figma-shot("fig/figma/Log In.png"),
+    figma-shot("fig/figma/Sign Up.png"),
   ),
   caption: [Figma designs for authentication pages],
 )
@@ -184,7 +184,7 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 1,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/Contest Page.png"),
+    figma-shot("fig/figma/Contest Page.png"),
   ),
   caption: [Figma design for the contest overview page],
 )
@@ -194,8 +194,8 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 2,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/Problem.png"),
-    figma-shot("fig/Contest (1)/Problem Page.png"),
+    figma-shot("fig/figma/Problem.png"),
+    figma-shot("fig/figma/Problem Page.png"),
   ),
   caption: [Figma designs for problem list and problem-solving pages],
 )
@@ -205,7 +205,7 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 1,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/Submission Page.png"),
+    figma-shot("fig/figma/Submission Page.png"),
   ),
   caption: [Figma design for the submission page],
 )
@@ -215,8 +215,8 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 2,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/Pass.png"),
-    figma-shot("fig/Contest (1)/Fail.png"),
+    figma-shot("fig/figma/Pass.png"),
+    figma-shot("fig/figma/Fail.png"),
   ),
   caption: [Figma designs for submission result feedback],
 )
@@ -226,8 +226,8 @@ which reduced uncertainty during implementation and made the later React develop
   grid(
     columns: 2,
     gutter: 0.6cm,
-    figma-shot("fig/Contest (1)/FAQ.png"),
-    figma-shot("fig/Contest (1)/My Account.png"),
+    figma-shot("fig/figma/FAQ.png"),
+    figma-shot("fig/figma/My Account.png"),
   ),
   caption: [Figma designs for supporting participant pages],
 )

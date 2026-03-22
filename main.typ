@@ -82,7 +82,11 @@
 #counter(page).update(1)
 #set heading(numbering: "1.1.1")
 
-#include "intro.typ"
+#include "chapter1_introduction.typ"
+#include "chapter2_frontend_design.typ"
+#include "chapter3_core_participant_features.typ"
+#include "chapter4_api_and_improvements.typ"
+#include "chapter5_conclusion.typ"
 
 // ── Bibliography ──
 #pagebreak(weak: true)
