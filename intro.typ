@@ -2,20 +2,19 @@
 
 == Background
 
-Online programming contests are widely used in computing education to train problem-solving,
-algorithmic thinking, and programming fluency. Participants can improve their coding skills through
-regular contest participation and gain a clearer understanding of their abilities in a competitive
-environment. In practice, however, many schools still depend on external contest platforms. While
-these platforms are convenient, they often provide limited control over workflows, branding,
-permissions, and feature priorities, which can create friction when the system needs to match local
-academic requirements or internal event organization.
+Online programming contests are widely used in computing education. They help students practise
+problem solving, algorithmic thinking, and programming skills. By joining contests regularly,
+participants can improve their coding ability and better understand their level in a competitive
+setting. However, many schools still depend on external contest platforms. These platforms are
+convenient, but they often give limited control over workflow, branding, permissions, and feature
+priority. This can be a problem when the system needs to match local academic or organizational
+needs.
 
 This project aims to create a virtual judge system for the Nanyang Programming Contests series. At
-the system level, the platform is intended to help judges source contest problems from multiple
-platforms, support clarifications during contests, allow customized scoring rules, and provide a
-reliable load-balancing mechanism for contest operation. In addition to these organizational
-requirements, the system also needs to present a clear and usable participant-facing interface for
-contest entry, problem solving, submission tracking, and related contest interactions.
+the system level, the platform is meant to help judges collect contest problems from different
+sources, support clarifications during contests, allow custom scoring rules, and provide reliable
+load balancing. At the same time, the system also needs a clear participant-facing interface for
+joining contests, solving problems, checking submissions, and handling other contest actions.
 
 Within this larger system, my work focuses on the frontend implementation for the participant-facing
 experience. The frontend is responsible for guiding users from authentication into contests and then
@@ -33,8 +32,9 @@ submissions, and supporting account-related views.
 
 === Comparison with Existing Platforms
 
-Before finalizing the design direction, we reviewed several existing programming
-contest platforms, such as Vjudge, Kattis, and CMS. Therefore, the NanyangOJ is designed to combine the strengths of these platforms while addressing their limitations. 
+Before deciding the design direction, we looked at several existing contest platforms, such as
+Vjudge, Kattis, and CMS. NanyangOJ was then planned to keep some of their strengths while avoiding
+some of their limitations.
 \
 
 
@@ -52,7 +52,8 @@ problem sources that it integrates.
 
 Kattis provides a more unified and polished contest environment. Its interface presents problems,
 submissions, standings, scoring, and language support in a highly consistent way, which is valuable
-for participants because the workflow is easy to understand and the contest experience is smooth from start to finish. At the same time, Kattis is a mature general-purpose platform whose
+for participants because the workflow is easy to understand and the contest experience is smooth
+from start to finish. At the same time, Kattis is a mature general-purpose platform whose
 structure is designed for broad use cases rather than being tailored specifically to the local
 needs, workflows, and ownership requirements of one university.
 \
@@ -66,36 +67,32 @@ This makes CMS powerful from an organizational perspective, but it also highligh
 technically capable contest system still needs an accessible participant-facing layer if it is to
 serve daily school use, internal training, and routine academic events.
 
-From this comparison, the design philosophy of NanyangOJ became clearer. The intended platform
-should combine the practical usability of a training-oriented system, the consistency of a polished
-contest interface, and the controllability of a school-owned deployment. In other words, the goal
-is not simply to replicate an existing platform, but to build a system that is straightforward for
-students to use, maintainable for developers to evolve, and adaptable for the school to manage in
-terms of contest rules, participant experience, branding, and future feature expansion. This is why
-NanyangOJ is positioned as a locally controlled contest platform with a clear participant workflow,
-unified frontend behavior, and close alignment between frontend design and backend-supported system
-state.
+After this comparison, the direction of NanyangOJ became clearer. The platform should combine the
+practical usability of a training system, the consistency of a polished contest interface, and the
+control of a school-owned deployment. The aim is not simply to copy an existing platform. The aim
+is to build a system that is easy for students to use, manageable for developers, and flexible
+enough for the school to adjust in the future.
 \
 \
 \
 
 === Motivation
 
-This project aims to create a school contest platform that can meet the unique academic and competitive needs of the school.
-A school-owned system gives more
+This project aims to create a school contest platform that can meet the academic and competitive
+needs of the school. A school-owned system gives more
 control over interface design, user management, contest rules, and future feature development. It
 also makes it possible to create a more coherent experience for students by aligning the platform
 with existing school workflows rather than forcing users to adapt to a third-party system.
 
-From a frontend perspective, this motivation translates into two practical requirements. Firstly, the
-platform should provide a clear and consistent participant workflow, so that users can move from
-login to contest participation without any confusion. Secondly, the frontend should be maintainable and
-closely aligned with backend behavior, because a contest system depends heavily on accurate status
-updates, authenticated access, and real-time contest information.
+From the frontend side, this leads to two practical needs. First, the platform should provide a
+clear and consistent participant workflow, so users can move from login to contest participation
+without confusion. Second, the frontend should be maintainable and closely aligned with backend
+behavior, because a contest system depends on correct status updates, authenticated access, and
+real-time contest information.
 
 == Project Objectives
 
-The frontend work in this project is guided by the following objectives:
+The frontend work in this project follows these objectives:
 
 - To design a consistent participant interface for the major contest-related pages.
 - To implement the designed interface in React and TypeScript using reusable components and clear
@@ -130,9 +127,9 @@ the earlier design work in Figma, I implemented or refined the main user-facing 
 
 In addition to page implementation, I also worked on the frontend architecture needed to support
 these pages, including routing, API abstraction, authentication token handling, shared UI
-components, and response validation. In the recent stage of the project, I further improved the
-integration between the frontend and the backend by correcting mismatched API routes and replacing a
-browser-only contest exit mechanism with a server-backed workflow.
+components, and response validation. In the later stage of the project, I also improved the
+integration between the frontend and the backend by correcting API mismatches and improving how the
+frontend handled contest-related state.
 
 #figure(
   table(
@@ -235,24 +232,23 @@ which reduced uncertainty during implementation and made the later React develop
   caption: [Figma designs for supporting participant pages],
 )
 
-The contest-related pages were designed to support a main workflow. The contest page presents the
-active contest together with its problem list and clarification area, so that participants can
-access both task information and announcements in one place. The problem page follows a split
-layout that separates the statement from the code editor section, allowing participants to read and
-solve problems efficiently. Submission pages were designed to make status, score, and submitted
-code easy to inspect, while the FAQ and profile pages provide platform guidance and user account
-information in a familiar layout.
+The contest-related pages were designed around one main workflow. The contest page shows the active
+contest together with its problem list and clarification area, so participants can see both task
+information and announcements in one place. The problem page uses a split layout for the statement
+and the code editor. This helps participants read and solve problems more easily. Submission pages
+were designed to make status, score, and submitted code easy to inspect. The FAQ and profile pages
+provide guidance and account information in the same general style.
 
 == Frontend Technology Choices
 
 The frontend is implemented as a React and TypeScript single-page application and built with Vite.
-React Router is used to define both participant and administrative routes, while Material UI and
-Emotion provide the main design system, component styling, and theme support across the interface.
+React Router is used to define both participant and administrative routes. Material UI and Emotion
+provide the main design system, component styling, and theme support across the interface.
 \
 For backend communication, the project uses Axios through a centralized API service layer with
 request and response interceptors for token handling and error processing. Zod schemas are used
-alongside TypeScript types to validate backend payloads at runtime, which helps reduce hidden
-integration mismatches. In feature-specific areas, the frontend also uses Monaco Editor for code
+with TypeScript types to validate backend payloads at runtime. This helps reduce hidden integration
+mismatches. In specific parts of the frontend, the project also uses Monaco Editor for code
 submission and React Markdown with `remark-gfm` and syntax highlighting for rendering problem
 content.
 
@@ -583,6 +579,30 @@ light and dark themes, which makes the interface more flexible under different v
 I also added adjustable text sizing so that dense pages are easier to read. This is especially
 helpful on pages such as problem statements, submission records, and FAQ content.
 
+#figure(
+  kind: image,
+  image("fig/dark/light1.png", width: 100%),
+  caption: [Light theme example with normal font size],
+)
+
+#figure(
+  kind: image,
+  image("fig/dark/dark1.png", width: 100%),
+  caption: [Dark theme example with normal font size],
+)
+
+#figure(
+  kind: image,
+  image("fig/dark/light2.png", width: 100%),
+  caption: [Light theme example with large font size],
+)
+
+#figure(
+  kind: image,
+  image("fig/dark/dark2.png", width: 100%),
+  caption: [Dark theme example with large font size],
+)
+
 === Uniform Page Structure
 
 Another improvement was the more consistent use of card-based layouts and shared page structure.
@@ -689,7 +709,22 @@ layout consistency, and a centralized API layer for communicating with the backe
 stages of the work, I also focused on improving frontend reliability by aligning requests and data
 handling more closely with the current backend behavior.
 
-Taken together, these parts form a usable foundation for the participant side of the platform. The
-system is still not fully complete, and some features can be extended further in future work,
-especially as backend support becomes more mature. Even so, the current frontend already shows how
-the platform can provide a more coherent and school-controlled contest experience for students.
+From a practical point of view, this frontend is important because it gives the contest platform a
+usable participant-facing layer. A contest system is not only about judging submissions correctly.
+It also needs pages that help users log in, find contests, read problems, submit code, check
+results, and handle common questions without confusion. For this reason, the work in this project
+was not limited to building separate screens. It was also about connecting these screens into one
+clear flow that participants can follow during real use.
+
+The project also shows that frontend work in a contest platform involves both interface design and
+system alignment. A page may look complete on its own, but it still depends on correct routing,
+shared state, reusable components, and accurate backend communication. Because of this, a large part
+of the work was making sure that the frontend remained consistent in both appearance and behavior.
+This was especially important when refining participant pages and adjusting the frontend to match
+the current backend contract more closely.
+
+There is still room for further work. Some parts of the platform can be connected more deeply to
+live backend data, and some pages can continue to be refined as the full system becomes more
+complete. Even so, the frontend implemented in this project already provides a solid base for a
+school-owned online judge. It supports the main participant workflow and shows how the platform can
+be developed into a more reliable and coherent contest environment for students.
