@@ -10,6 +10,9 @@ convenient, but they often give limited control over workflow, branding, permiss
 priority. This can be a problem when the system needs to match local academic or organizational
 needs.
 
+Practical guidance on running online contests also shows that clear workflows, rules, timing, and
+participant communication matter a lot for the overall contest experience @aswell-online-contest.
+
 This project aims to create a virtual judge system for the Nanyang Programming Contests series. At
 the system level, the platform is meant to help judges collect contest problems from different
 sources, support clarifications during contests, allow custom scoring rules, and provide reliable
@@ -33,14 +36,14 @@ submissions, and supporting account-related views.
 === Comparison with Existing Platforms
 
 Before deciding the design direction, we looked at several existing contest platforms, such as
-Vjudge, Kattis, and CMS. NanyangOJ was then planned to keep some of their strengths while avoiding
-some of their limitations.
+Vjudge @vjudge, Kattis @kattis, and CMS @cms. NanyangOJ was then planned to keep some of their
+strengths while avoiding some of their limitations.
 \
 
 
 #heading(level: 4, numbering: none)[Vjudge]
 
-Vjudge is strong in aggregation and flexibility: it connects
+Vjudge @vjudge is strong in aggregation and flexibility: it connects
 problems from many existing online judges and makes it convenient to organize practice sets and
 contests from distributed problem sources. This makes it useful for training and fast contest
 arrangement, but it also means that part of the overall user experience depends on the external
@@ -50,7 +53,7 @@ problem sources that it integrates.
 
 #heading(level: 4, numbering: none)[Kattis]
 
-Kattis provides a more unified and polished contest environment. Its interface presents problems,
+Kattis @kattis provides a more unified and polished contest environment. Its interface presents problems,
 submissions, standings, scoring, and language support in a highly consistent way, which is valuable
 for participants because the workflow is easy to understand and the contest experience is smooth
 from start to finish. At the same time, Kattis is a mature general-purpose platform whose
@@ -61,7 +64,7 @@ needs, workflows, and ownership requirements of one university.
 
 #heading(level: 4, numbering: none)[CMS]
 
-CMS is a contest management infrastructure. It is designed to
+CMS @cms is a contest management infrastructure. It is designed to
 support many different contest types, scoring methods, timing models, and administrative workflows.
 This makes CMS powerful from an organizational perspective, but it also highlights that a
 technically capable contest system still needs an accessible participant-facing layer if it is to

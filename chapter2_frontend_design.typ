@@ -2,7 +2,7 @@
 
 == UI/UX Design with Figma
 
-Before implementation, I designed the interface in Figma to define the visual
+Before implementation, I designed the interface in Figma @figma to define the visual
 structure and user flow of the platform. This design stage helped establish consistency in spacing,
 typography, page hierarchy, and navigation patterns across the application. Common interface
 elements such as the sidebar, page containers, cards, and form layouts were planned before coding,
@@ -83,9 +83,10 @@ provide guidance and account information in the same general style.
 
 == Frontend Technology Choices
 
-The frontend is implemented as a React and TypeScript single-page application and built with Vite.
-React Router is used to define both participant and administrative routes. Material UI and Emotion
-provide the main design system, component styling, and theme support across the interface.
+The frontend is implemented as a React @react and TypeScript @typescript single-page application
+and built with Vite @vite. React Router is used to define both participant and administrative
+routes. Material UI and Emotion provide the main design system, component styling, and theme
+support across the interface.
 \
 For backend communication, the project uses Axios through a centralized API service layer with
 request and response interceptors for token handling and error processing. Zod schemas are used
