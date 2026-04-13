@@ -24,6 +24,29 @@ page handles its own task, but still fits into one continuous workflow. A partic
 contest discovery to problem solving and then to submission review without leaving the same
 application frame.
 
+The following route excerpt shows how the main participant pages are connected in the frontend.
+
+#figure(
+  kind: raw,
+  [
+    ```tsx
+    <Route path="contest" element={<ContestListPage />} />
+    <Route path="contest/:contestId" element={<ContestPage />} />
+    <Route
+      path="contest/:contestId/problem/:problemId"
+      element={<ProblemPage />}
+    />
+    <Route path="submissions" element={<SubmissionsPage />} />
+    <Route
+      path="contest/:contestId/submission/:submissionId"
+      element={<SubmissionResultPage />}
+    />
+    <Route path="ranking" element={<RankingPage />} />
+    ```
+  ],
+  caption: [Code excerpt showing the main participant route definitions],
+)
+
 The screenshots shown in the following frontend sections use sample data for demonstration. They do
 not represent fully connected live contest data, because backend data transmission was still not
 fully ready at the time these interface captures were taken.
@@ -182,6 +205,64 @@ This page is one of the most important parts of the participant workflow because
 coding, and submission preparation into the same place. Instead of forcing the user to move between
 separate screens for the statement and the editor, the frontend keeps these tasks close together.
 In practice, the page functions more like a working area than a static problem description.
+
+Part of this implementation is shown below. The editor stores both the selected language and the
+current draft locally, so users do not lose work immediately when they switch languages or return
+to the same problem.
+
+#figure(
+  kind: raw,
+  [
+    ```tsx
+    const getStorageKey = (problemId: string, lang: string) =>
+      `code_${problemId}_${lang}`
+
+    const saveCode = (problemId: string, lang: string, code: string) => {
+      if (!problemId) return
+      localStorage.setItem(getStorageKey(problemId, lang), code)
+    }
+
+    const saveLanguage = (problemId: string, lang: string) => {
+      if (!problemId) return
+      localStorage.setItem(`language_${problemId}`, lang)
+    }
+    ```
+  ],
+  caption: [Code excerpt showing how the problem editor stores draft code locally],
+)
+
+The submit action is kept in the same component. After the request succeeds, the page goes directly
+to the submission result view for that attempt.
+
+#figure(
+  kind: raw,
+  [
+    ```tsx
+    const handleSubmit = async () => {
+      if (!contestId || !problemId) return
+      setIsSubmitting(true)
+      setSubmitError(null)
+      try {
+        const submission = await api.contests.get(contestId).createSubmission({
+          problem_id: problemId,
+          language,
+          code,
+        })
+        void navigate(
+          `/contest/${contestId}/submission/${encodeURIComponent(submission.id)}`
+        )
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to submit solution."
+        setSubmitError(message)
+      } finally {
+        setIsSubmitting(false)
+      }
+    }
+    ```
+  ],
+  caption: [Code excerpt showing the submission action and result-page navigation],
+)
 
 #figure(
   kind: image,

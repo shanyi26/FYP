@@ -27,19 +27,13 @@ submissions, and supporting account-related views.
 \
 \
 \
-\
-\
-\
-\
-\
 
 === Comparison with Existing Platforms
 
 Before deciding the design direction, we looked at several existing contest platforms, such as
-Vjudge @vjudge, Kattis @kattis, and CMS @cms. NanyangOJ was then planned to keep some of their
-strengths while avoiding some of their limitations.
+Vjudge @vjudge, Kattis @kattis, CMS @cms, and Codeforces @codeforces. NanyangOJ was then planned
+to keep some of their strengths while avoiding some of their limitations.
 \
-
 
 #heading(level: 4, numbering: none)[Vjudge]
 
@@ -49,7 +43,6 @@ contests from distributed problem sources. This makes it useful for training and
 arrangement, but it also means that part of the overall user experience depends on the external
 problem sources that it integrates.
 \
-
 
 #heading(level: 4, numbering: none)[Kattis]
 
@@ -61,7 +54,6 @@ structure is designed for broad use cases rather than being tailored specificall
 needs, workflows, and ownership requirements of one university.
 \
 
-
 #heading(level: 4, numbering: none)[CMS]
 
 CMS @cms is a contest management infrastructure. It is designed to
@@ -69,6 +61,16 @@ support many different contest types, scoring methods, timing models, and admini
 This makes CMS powerful from an organizational perspective, but it also highlights that a
 technically capable contest system still needs an accessible participant-facing layer if it is to
 serve daily school use, internal training, and routine academic events.
+\
+
+#heading(level: 4, numbering: none)[Codeforces]
+
+Codeforces @codeforces is well known in competitive programming. It has frequent contests and a
+large problem archive. It is useful as a reference because participants can move quickly between
+statements, submissions, and standings. But it is a large public platform for many users, so it is
+not built around the branding, management needs, and internal workflow of one school.
+\
+\
 
 After this comparison, the direction of NanyangOJ became clearer. The platform should combine the
 practical usability of a training system, the consistency of a polished contest interface, and the

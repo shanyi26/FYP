@@ -76,10 +76,87 @@ which reduced uncertainty during implementation and made the later React develop
 
 The contest-related pages were designed around one main workflow. The contest page shows the active
 contest together with its problem list and clarification area where participants can see both task
-information and announcements in one place. The problem page uses a 'lift and right' splited layout for the statement
-and the code editor. This helps participants read and solve problems more easily. Submission pages
-can show the judging status, score, and submitted code. The FAQ and profile pages
+information and announcements in one place. The problem page uses a left-and-right split layout for
+the statement and the code editor. This helps participants read and solve problems more easily.
+Submission pages can show the judging status, score, and submitted code. The FAQ and profile pages
 provide guidance and account information in the same general style.
+
+== Layout and Interaction Rationale
+
+After the initial Figma planning, I had to decide how the participant workflow should feel in real
+use. The main goal was to keep the pages clean and make page switching feel stable. Because of
+this, the frontend uses one fixed sidebar across the main participant views. Contest, problems,
+submissions, and ranking all stay in the same place. Users do not need to find the main actions
+again every time the page changes.
+
+The contest page keeps the problem list and clarification area on the same screen. During a
+contest, participants often need both at the same time. They may check the problem list, read a
+clarification, or send a question to the jury one after another. Putting these parts together cuts
+down extra page switching.
+
+The problem page uses a split layout so that the statement and the code editor can be seen
+together. Participants often read part of the statement, check a sample, and then go back to their
+code. If the statement and editor are too far apart, this becomes slow and repetitive. The split
+layout keeps both tasks close to each other.
+
+I also added theme and typography options. The frontend supports light and dark themes, and it also
+supports a larger font mode. This helps on dense pages such as problem statements, submission
+records, and FAQ content. It also gives users a simpler way to adjust the interface to their own
+reading preference.
+
+The basic theme logic is implemented in the shared theme provider. It stores both the color mode
+and the font size mode in local storage so the preference stays after refresh.
+
+#figure(
+  kind: raw,
+  [
+    ```tsx
+    const [mode, setMode] = useState<"light" | "dark">(() => {
+      const storedTheme = localStorage.getItem("theme")
+      return storedTheme === "dark" ? "dark" : "light"
+    })
+
+    const [fontSizeMode, setFontSizeMode] = useState<"normal" | "large">(() => {
+      const stored = localStorage.getItem("font_size_mode")
+      return stored === "large" ? "large" : "normal"
+    })
+
+    useEffect(() => {
+      window.document.documentElement.style.fontSize =
+        fontSizeMode === "large" ? "20px" : "16px"
+      localStorage.setItem("font_size_mode", fontSizeMode)
+    }, [fontSizeMode])
+    ```
+  ],
+  caption: [Code excerpt showing how theme and font-size preferences are restored],
+)
+
+The switch actions are kept simple as well. Both settings are updated from one shared context, so
+the same controls can be reused across the frontend.
+
+#figure(
+  kind: raw,
+  [
+    ```tsx
+    const toggleTheme = () => {
+      setMode((prev) => {
+        const next = prev === "light" ? "dark" : "light"
+        localStorage.setItem("theme", next)
+        return next
+      })
+    }
+
+    const toggleFontSize = () => {
+      setFontSizeMode((prev) => {
+        const next = prev === "normal" ? "large" : "normal"
+        localStorage.setItem("font_size_mode", next)
+        return next
+      })
+    }
+    ```
+  ],
+  caption: [Code excerpt showing the shared theme and font-size toggle actions],
+)
 
 == Frontend Technology Choices
 

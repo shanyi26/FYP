@@ -18,6 +18,14 @@
 // Paragraph setup (1.5 line spacing, no first-line indent)
 #set par(leading: 0.9em, first-line-indent: 0pt, spacing: 1.2em)
 
+// Code block styling
+#show raw.where(block: true): set block(
+  fill: luma(245),
+  stroke: 0.6pt + luma(200),
+  inset: 10pt,
+  radius: 6pt,
+)
+
 // Heading styles (chapter-like for level 1)
 #show heading.where(level: 1): it => {
   pagebreak(weak: true)
@@ -76,6 +84,10 @@
 // List of Figures
 = List of Figures
 #outline(title: none, target: figure.where(kind: image))
+
+// List of Code Listings
+= List of Code Listings
+#outline(title: none, target: figure.where(kind: raw))
 
 // ── Main content (arabic page numbers) ──
 #set page(numbering: "1")
