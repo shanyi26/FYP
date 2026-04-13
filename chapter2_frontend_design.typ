@@ -2,11 +2,16 @@
 
 == UI/UX Design with Figma
 
-Before implementation, I designed the interface in Figma @figma to define the visual
-structure and user flow of the platform. This design stage helped establish consistency in spacing,
-typography, page hierarchy, and navigation patterns across the application. Common interface
-elements such as the sidebar, page containers, cards, and form layouts were planned before coding,
-which reduced uncertainty during implementation and made the later React development more direct.
+Before implementation, I used Figma @figma to plan the participant interface and the main user
+flow. This stage was not only for visual mockups. It was also used to check whether the workflow
+could support contest use without too much page switching or confusing interaction patterns. By
+deciding the placement of navigation, cards, forms, headers, and content areas early, I reduced
+the amount of structural rework needed during React implementation.
+
+The Figma stage also helped separate two questions: what information a page should show, and how
+that information should be arranged so that users can act on it quickly. This was important because
+contest users often move between statements, clarifications, submissions, and code editing under
+time pressure.
 
 #let figma-shot(path) = image(path, width: 100%)
 
@@ -18,7 +23,7 @@ which reduced uncertainty during implementation and made the later React develop
     figma-shot("fig/figma/Log In.png"),
     figma-shot("fig/figma/Sign Up.png"),
   ),
-  caption: [Figma designs for authentication pages],
+  caption: [Figma designs for the authentication flow],
 )
 
 #figure(
@@ -39,7 +44,7 @@ which reduced uncertainty during implementation and made the later React develop
     figma-shot("fig/figma/Problem.png"),
     figma-shot("fig/figma/Problem Page.png"),
   ),
-  caption: [Figma designs for problem list and problem-solving pages],
+  caption: [Figma designs for problem browsing and problem solving],
 )
 
 #figure(
@@ -49,18 +54,7 @@ which reduced uncertainty during implementation and made the later React develop
     gutter: 0.6cm,
     figma-shot("fig/figma/Submission Page.png"),
   ),
-  caption: [Figma design for the submission page],
-)
-
-#figure(
-  kind: image,
-  grid(
-    columns: 2,
-    gutter: 0.6cm,
-    figma-shot("fig/figma/Pass.png"),
-    figma-shot("fig/figma/Fail.png"),
-  ),
-  caption: [Figma designs for submission result feedback],
+  caption: [Figma design for submission tracking],
 )
 
 #figure(
@@ -74,38 +68,37 @@ which reduced uncertainty during implementation and made the later React develop
   caption: [Figma designs for supporting participant pages],
 )
 
-The contest-related pages were designed around one main workflow. The contest page shows the active
-contest together with its problem list and clarification area where participants can see both task
-information and announcements in one place. The problem page uses a left-and-right split layout for
-the statement and the code editor. This helps participants read and solve problems more easily.
-Submission pages can show the judging status, score, and submitted code. The FAQ and profile pages
-provide guidance and account information in the same general style.
+These designs set the basic page templates later reused across the frontend. They do not show every
+implementation detail, but they do show the intended information order and route flow.
 
 == Layout and Interaction Rationale
 
-After the initial Figma planning, I had to decide how the participant workflow should feel in real
-use. The main goal was to keep the pages clean and make page switching feel stable. Because of
-this, the frontend uses one fixed sidebar across the main participant views. Contest, problems,
-submissions, and ranking all stay in the same place. Users do not need to find the main actions
-again every time the page changes.
+The participant interface was designed around four main constraints. Users switch context often.
+Contest pages contain dense technical content. Some actions depend on time and contest state. The
+system may also be used for long reading sessions.
 
-The contest page keeps the problem list and clarification area on the same screen. During a
-contest, participants often need both at the same time. They may check the problem list, read a
-clarification, or send a question to the jury one after another. Putting these parts together cuts
-down extra page switching.
+The frontend uses a stable application frame with persistent navigation. This reduces the cost of
+moving between contest pages because users do not need to find the main actions again on every
+screen. It also helps users keep one clear view of the full contest workflow.
 
-The problem page uses a split layout so that the statement and the code editor can be seen
-together. Participants often read part of the statement, check a sample, and then go back to their
-code. If the statement and editor are too far apart, this becomes slow and repetitive. The split
-layout keeps both tasks close to each other.
+The contest overview keeps the problem list and clarification area on the same page. These two
+parts are often used together during a contest. If they were split too much, users would need more
+page changes.
 
-I also added theme and typography options. The frontend supports light and dark themes, and it also
-supports a larger font mode. This helps on dense pages such as problem statements, submission
-records, and FAQ content. It also gives users a simpler way to adjust the interface to their own
-reading preference.
+The problem page uses a split layout so that reading and coding stay close together. Participants
+often move between the statement, the examples, and the editor. A split layout makes this easier.
+It does reduce horizontal space, so the layout has to stay simple.
 
-The basic theme logic is implemented in the shared theme provider. It stores both the color mode
-and the font size mode in local storage so the preference stays after refresh.
+The design also includes theme and font-size options. These are not only visual features. Contest
+pages can contain long statements, dense tables, and many clarifications, so users may need a page
+that is easier to read on different screens and in different lighting conditions.
+
+These choices also involve trade-offs. A persistent sidebar uses some screen space, but it gives
+better navigation across many pages. A split problem layout leaves less horizontal room, but it
+works better for the read-code cycle during problem solving.
+
+The basic preference logic is handled in a shared theme provider, which restores the selected mode
+and font-size setting from local storage.
 
 #figure(
   kind: raw,
@@ -131,8 +124,7 @@ and the font size mode in local storage so the preference stays after refresh.
   caption: [Code excerpt showing how theme and font-size preferences are restored],
 )
 
-The switch actions are kept simple as well. Both settings are updated from one shared context, so
-the same controls can be reused across the frontend.
+The controls are also shared so that the same interaction can be reused across the frontend.
 
 #figure(
   kind: raw,
@@ -160,54 +152,57 @@ the same controls can be reused across the frontend.
 
 == Frontend Technology Choices
 
-The frontend is implemented as a React @react and TypeScript @typescript single-page application
-and built with Vite @vite. React Router is used to define both participant and administrative
-routes. Material UI and Emotion provide the main design system, component styling, and theme
-support across the interface.
-\
+The frontend is a React @react and TypeScript @typescript single-page application built with Vite
+@vite. This stack fits the project because the system needs route-based navigation, reusable
+components, and steady UI development. React Router models contest-scoped routes. Material UI and
+Emotion provide a common design base and theme support.
+
 For backend communication, the project uses Axios through a centralized API service layer with
-request and response interceptors for token handling and error processing. Zod schemas are used
-with TypeScript types to validate backend payloads at runtime. This helps reduce hidden integration
-mismatches. In specific parts of the frontend, the project also uses Monaco Editor for code
-submission and React Markdown with `remark-gfm` and syntax highlighting for rendering problem
-content.
+request and response interceptors. Zod is used with TypeScript so that backend payloads can be
+checked at runtime, not only described at compile time. This is useful because many participant
+pages depend on backend data that can change during development.
+
+The project also uses Monaco Editor for code submission and React Markdown with `remark-gfm` and
+syntax highlighting for problem statements. These tools support the two main tasks on the
+participant side: reading technical content and writing code.
+
+These choices also involve trade-offs. Request logic could have been kept inside each page, but
+that would make backend changes harder to track and could lead to different error handling on
+different pages. TypeScript interfaces alone would also be simpler, but they would not catch bad
+live payloads at runtime.
 
 #figure(
   table(
     columns: (1.1fr, 1fr, 2.2fr),
     inset: 8pt,
     stroke: luma(180),
-    [*Technology*], [*Category*], [*Purpose in the project*],
-    [Vite], [Build tool], [Provides the development server and frontend build pipeline for the React
-    application.],
-    [React], [UI framework], [Implements page-based interfaces through reusable components and
-    supports a consistent participant experience.],
-    [TypeScript], [Language], [Adds static typing so frontend logic, props, and API-facing types
-    remain easier to maintain.],
-    [Material UI], [Component library], [Provides common UI elements such as forms, dialogs, cards,
-    and tables with a consistent design base.],
-    [Emotion], [Styling], [Supports theme-aware styling and integrates with Material UI for custom
-    interface design.],
-    [React Router], [Routing], [Defines navigation between contest pages and keeps the participant
-    workflow structured.],
-    [Axios], [HTTP client], [Handles API requests through a shared service layer with centralized
-    authentication and error handling.],
-    [Zod], [Validation], [Validates backend responses at runtime to catch schema mismatches early.],
-    [Monaco Editor], [Code editor], [Provides the in-browser programming editor used on the problem
-    submission page.],
-    [React Markdown], [Content rendering], [Renders problem statements and rich text content in the
-    frontend interface.],
+    [*Technology*], [*Category*], [*Reason for selection*],
+    [Vite], [Build tool], [Provides a lightweight development and build pipeline that suits
+    iterative frontend work.],
+    [React], [UI framework], [Supports reusable components and route-based interfaces for a
+    multi-page participant workflow.],
+    [TypeScript], [Language], [Improves maintainability in component logic, props, and API-facing
+    types.],
+    [Material UI], [Component library], [Provides consistent form, dialog, card, and table
+    primitives that can be themed across the application.],
+    [Emotion], [Styling], [Supports theme-aware styling and integrates naturally with Material UI.],
+    [React Router], [Routing], [Models contest-scoped navigation and keeps page transitions
+    explicit.],
+    [Axios], [HTTP client], [Supports centralized request handling, authentication headers, and
+    error interception.],
+    [Zod], [Validation], [Checks backend payloads at runtime so integration mismatches can be
+    detected earlier.],
+    [Monaco Editor], [Code editor], [Provides an in-browser editor suitable for multi-language code
+    submission.],
+    [React Markdown], [Content rendering], [Renders problem statements and related rich text in a
+    structured way.],
   ),
   caption: [Technology stack used in the frontend implementation],
 )
 
-The project structure separates concerns into pages, reusable components, type definitions, and
-service modules. This is particularly useful for a contest platform because many pages depend on the
-same authenticated data flow. Instead of embedding fetch logic separately in every component, the
-frontend uses a shared API abstraction that exposes contest, authentication, submission, and jury
-operations with a consistent interface.
-
-This separation of concerns is shown in Figure 8.
+The project structure separates pages, reusable components, service modules, and typed schemas.
+This became useful later when API changes had to be handled in shared modules instead of many page
+components.
 
 #figure(
   image("fig/frontend tech.png", width: 100%),

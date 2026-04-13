@@ -1,33 +1,23 @@
 = Conclusion
 
-This project focuses on the participant-facing frontend of NanyangOJ, a school-owned online judge
-intended to support local programming contests and training activities. My work covered both design
-and implementation. I first planned the main interface structure in Figma, and then implemented the
-core participant pages in React and TypeScript, including authentication, contest access, problem
-solving, submissions, FAQ, and profile-related views.
+This project focused on the participant frontend of NanyangOJ as one part of a school-owned online
+judge. The work covered both interface design and frontend implementation.
 
-Beyond page implementation, the project also involved building the frontend structure needed to
-support these functions in a maintainable way. This included routing, shared components, theme and
-layout consistency, and a centralized API layer for communicating with the backend. In the later
-stages of the work, I also focused on improving frontend reliability by aligning requests and data
-handling more closely with the current backend behavior.
+The main goals of the project were achieved in the following ways. The participant interface was
+planned in Figma and implemented in React and TypeScript. The main workflow was built through
+structured routing, reusable components, and contest-scoped pages. Frontend-backend communication
+was moved into a shared API service layer. The implemented frontend supports login, contest entry,
+problem solving, clarifications, submission review, ranking access, and profile access. Later
+integration work also improved correctness by updating routes and types to match the current
+backend contract.
 
-From a practical point of view, this frontend is important because it gives the contest platform a
-usable participant-facing layer. A contest system is not only about judging submissions correctly.
-It also needs pages that help users log in, find contests, read problems, submit code, check
-results, and handle common questions without confusion. For this reason, the work in this project
-was not limited to building separate screens. It was also about connecting these screens into one
-clear flow that participants can follow during real use.
+One main lesson from the project is that contest frontend work is not only about making pages look
+complete. The frontend also has to keep the workflow clear, read backend state correctly, and stay
+easy to maintain as the system changes.
 
-The project also shows that frontend work in a contest platform involves both interface design and
-system alignment. A page may look complete on its own, but it still depends on correct routing,
-shared state, reusable components, and accurate backend communication. Because of this, a large part
-of the work was making sure that the frontend remained consistent in both appearance and behavior.
-This was especially important when refining participant pages and adjusting the frontend to match
-the current backend contract more closely.
+The project also showed that frontend-backend integration was one of the hardest parts of the work.
+Participant actions depend on authenticated identity, contest participation state, route
+parameters, and the exact shape of backend responses.
 
-There is still room for further work. Some parts of the platform can be connected more deeply to
-live backend data, and some pages can continue to be refined as the full system becomes more
-complete. Even so, the frontend implemented in this project already provides a solid base for a
-school-owned online judge. It supports the main participant workflow and shows how the platform can
-be developed into a more reliable and coherent contest environment for students.
+The current frontend provides a practical base for a school-owned contest platform. There is still
+more work to do on live integration, automated end-to-end testing, and formal usability testing.

@@ -1,88 +1,50 @@
-= API Integration and Recent Improvements
+= API Integration, Validation, and Refinement
 
-== Frontend Beautification
+== Usability and Consistency Refinements
 
-Besides implementing the core functions and connecting the frontend to the backend, I also spent
-time improving the visual presentation of the interface. These changes were not meant to add new
-functions, but to make the platform easier to read, more consistent across pages, and more
-comfortable to use during a contest.
+Besides implementing the main contest features, I also refined the frontend so that it felt more
+consistent in repeated use. These changes were not the main engineering work, but they still
+mattered because a contest interface is used under time pressure and often for long sessions.
 
 === Theme and Typography
 
-One part of this work was theme and typography support. The frontend allows users to switch between
-light and dark themes, which makes the interface more flexible under different viewing conditions.
-I also added adjustable text sizing so that dense pages are easier to read. This is especially
-helpful on pages such as problem statements, submission records, and FAQ content.
+The frontend supports light and dark themes and also allows users to change text size. These
+features were added because pages such as problem statements, submission records, and FAQ content
+can contain a lot of text and may be used for a long time.
 
 #figure(
   kind: image,
   image("fig/dark/light1.png", width: 100%),
-  caption: [Light theme example with normal font size],
+  caption: [Light theme example],
 )
 
 #figure(
   kind: image,
   image("fig/dark/dark1.png", width: 100%),
-  caption: [Dark theme example with normal font size],
+  caption: [Dark theme example],
 )
 
-#figure(
-  kind: image,
-  image("fig/dark/light2.png", width: 100%),
-  caption: [Light theme example with large font size],
-)
+=== Shared Page Structure
 
-#figure(
-  kind: image,
-  image("fig/dark/dark2.png", width: 100%),
-  caption: [Dark theme example with large font size],
-)
+I also made the page structure more consistent by using shared cards, page headers, spacing
+patterns, and metadata sections. In earlier stages, different pages could drift into slightly
+different styles because they were built at different times.
 
-=== Uniform Page Structure
+This work also had an engineering side. Once the shared structure was settled, later updates could
+be made through shared components and containers instead of redesigning each page again.
 
-Another improvement was the more consistent use of card-based layouts and shared page structure.
-Instead of letting each page drift into its own visual style, I tried to keep a common arrangement
-for headers, content areas, metadata blocks, and supporting controls. This makes the contest pages,
-problem pages, submission pages, FAQ page, and profile page feel more related to one another.
-
-This kind of consistency matters more than it may first appear. In a contest system, users do not
-stay on one page for long. They move from the contest list to the contest view, then to a problem,
-then to submissions, and sometimes back again within a few minutes. If each page uses a different
-visual structure, the system feels harder to read even when the features are correct. Reusing the
-same card patterns and page structure reduced this problem and made the frontend feel more stable.
-
-The same visual changes also made later updates easier. Once a card style, spacing pattern, and
-header structure were settled, I could reuse them across several pages instead of redesigning each
-screen separately. This was useful during the later rounds of polishing, because it allowed visual
-refinements to spread across the frontend without rewriting every page from the beginning.
-
-=== Consistency and User Experience
-
-Although these changes are mostly visual, they still matter in practice. In a contest system,
-participants move frequently between different pages, so an inconsistent layout can make the
-experience feel fragmented even when the functions work correctly. A more uniform interface makes
-the page hierarchy clearer and the overall workflow smoother.
-
-Theme switching and font-size switching also improved usability in a more practical way. Problem
-statements, tables, and clarification areas can contain dense text. On long sessions, this can
-become tiring to read. Giving users the option to change theme and text size does not change the
-core logic of the platform, but it does make the interface easier to adapt to different screens,
-lighting conditions, and personal reading preferences.
-
-These changes were not only about appearance. They were meant to make normal use easier. A contest
-interface should not make the participant spend extra attention on layout, contrast, or page
-structure.
+Frontend refinement also had to be balanced with integration work. In practice, visual work and
+backend alignment moved at the same time, not one after the other.
 
 == Centralized API Service Layer
 
 All frontend API communication is handled through a centralized service module. This module defines
-request helpers, authentication handling, and typed interfaces for different backend endpoints. An
-authorization token stored after login is automatically attached to outgoing requests, which avoids
-duplicating token logic in each page component. Zod schemas are used to validate server responses at
-runtime, helping the frontend detect unexpected payloads early.
+request helpers, authentication handling, and typed interfaces for backend endpoints. After login,
+the authorization token is attached automatically to outgoing requests. Zod schemas are then used
+to check server responses at runtime.
 
-The request layer uses Axios interceptors to attach the token and convert backend errors into
-frontend-facing messages.
+The request layer uses Axios interceptors to attach the token and convert backend failures into
+simple frontend-facing messages.
 
 #figure(
   kind: raw,
@@ -110,31 +72,12 @@ frontend-facing messages.
   caption: [Code excerpt showing the Axios interceptor setup for authenticated requests],
 )
 
-This architecture improves separation of concerns. Page components such as the contest list page and
-contest detail page can request the data they need through high-level methods, while lower-level
-details such as path formatting, HTTP methods, and validation are hidden inside the shared service
-layer. The same structure also makes it easier to maintain a mock API mode for frontend development
-and testing.
+This structure keeps page components simpler. Pages such as the contest list page and contest
+detail page can call high-level methods, while HTTP methods, path formatting, authentication
+headers, and response validation stay in shared modules.
 
-Another advantage is that the service layer becomes the main place where backend behavior is
-translated into frontend behavior. Authentication headers, payload validation, and friendly error
-messages are all handled in the same general area. This avoids a common frontend problem where each
-page starts solving the same request issues in a slightly different way.
-
-From an implementation perspective, this service layer also makes the frontend easier to maintain as
-the project grows. When an API path or response shape changes, the adjustment can be handled in a
-small number of shared modules instead of being scattered across many pages. This is particularly
-useful in a contest system, because many views depend on related data such as contest metadata,
-participant state, problem information, and submission records. A centralized API layer therefore
-helps keep the frontend codebase more organized and reduces the risk of inconsistent request logic
-between pages.
-
-This also helps during debugging. If a request fails, I can inspect the shared API module first
-instead of checking many separate page components. In a project with several related views, this
-saves time and makes the source of an issue easier to narrow down.
-
-One part of this service layer is the conversion of backend error codes into simpler frontend
-messages. This keeps the participant-facing interface more understandable when a request fails.
+The service layer also handles error normalization. Backend error codes are not always suitable for
+direct display, so the frontend maps them to simpler messages.
 
 #figure(
   kind: raw,
@@ -157,8 +100,8 @@ messages. This keeps the participant-facing interface more understandable when a
   caption: [Code excerpt showing backend error messages translated into simpler frontend text],
 )
 
-Runtime validation is handled with Zod schemas. This makes the expected submission payload shape
-explicit in the frontend code.
+Runtime validation is handled with Zod schemas. This makes the expected data contract clear in the
+frontend code and reduces the risk of silently accepting bad payloads.
 
 #figure(
   kind: raw,
@@ -183,20 +126,16 @@ explicit in the frontend code.
   caption: [Code excerpt showing Zod schemas used to validate submission data],
 )
 
-Runtime validation was useful because static typing alone was not enough. TypeScript can describe
-what the frontend expects, but it cannot guarantee that the backend actually sends that shape at
-runtime. In a system where contest data, participant state, and submission results come from many
-requests, this matters. A mismatch may not always crash the page immediately. Sometimes it only
-shows up as missing text, a wrong status label, or a broken interaction flow. Runtime validation
-made these mismatches easier to spot earlier.
+This runtime layer was important because TypeScript alone only describes what the frontend expects
+at compile time. It does not guarantee that the backend will return the same shape at runtime.
 
-It also made the data contracts more explicit inside the frontend code. Instead of treating backend
-payloads as loosely shaped objects, the schemas made it clearer what fields were required and which
-ones were optional. This was especially useful while the frontend was still being aligned with the
-current backend implementation.
+This was especially useful because the frontend did not start with a fixed final backend contract.
+Early page work often used simplified assumptions or mock data so that layout and workflow could be
+built first. When real payloads were introduced, some of these assumptions turned out to be
+incomplete.
 
-Contest API methods are grouped in the same service layer. This keeps contest-related requests in
-one place instead of scattering them across many page components.
+Contest-related methods are grouped in the same service layer so that route-level components do not
+need to rebuild contest request logic again and again.
 
 #figure(
   kind: raw,
@@ -226,7 +165,7 @@ one place instead of scattering them across many page components.
     [`api.ts`], [API selection], [Chooses between the mock API and the server API so the frontend
     can work in different development modes.],
     [`auth` module], [Authentication and identity], [Handles login, registration, and current-user
-    retrieval through the `/me` endpoint and related auth requests.],
+    retrieval through shared authentication requests.],
     [`contests` module], [Contest operations], [Provides contest metadata, participant actions,
     problems, clarifications, and submissions through grouped contest methods.],
     [`system` module], [System status], [Exposes jury-oriented system status data needed for
@@ -237,81 +176,121 @@ one place instead of scattering them across many page components.
   caption: [Main API and service-layer modules used by the frontend],
 )
 
-== Alignment with the Current Backend
+== Difficulties in Frontend-Backend Integration
 
-In the latest round of work, I focused on aligning the frontend implementation with the current
-backend contract. One issue was that the frontend user profile request used an outdated path. This
-was corrected by changing the request to the backend's current `/me` endpoint. Contest-related
-frontend types were also updated to reflect actual backend fields, including `left_contest` and the
-`participants` response structure.
+The hardest part of connecting the frontend to the backend was not just sending requests. The hard
+part was keeping page behavior correct while the data contract and contest state assumptions were
+still becoming clear. A contest frontend depends on many related backend facts at the same time:
+whether the user is authenticated, whether the contest can be accessed, whether the participant has
+already left the contest, what problems belong to that contest, and how a submission result should
+be loaded after creation.
 
-These changes matter because an online contest system depends on accurate state handling. When
-frontend routes or types drift away from the backend, the interface may still render, but the
-behavior becomes unreliable. Aligning the API layer with the current backend reduced this kind of
-hidden inconsistency.
+This created several difficulties. Some early frontend work used simplified or mocked data so that
+pages could be built before the full backend behavior was ready. This helped early development, but
+it also meant that some problems appeared only later, when real backend responses introduced fields
+or states that were not fully represented in the frontend types.
 
-This alignment work was not limited to a single page. It required checking how the frontend
-interpreted backend data across several participant-facing features, including profile information,
-contest state, and contest-related lists. Doing this reduced the gap between what the frontend
-assumed and what the backend actually returned.
+Contest state was also harder than normal static page data. Actions such as joining, leaving,
+opening problems, and viewing submissions depended on timing and participation state. The frontend
+had to stay close to backend state changes.
 
-This kind of alignment work is easy to underestimate. A page may still compile and render even when
-it uses an outdated route or an old field name. The problem only becomes visible when a user tries
-to perform a real action, such as joining a contest, viewing a profile, or submitting a solution.
-For that reason, keeping the frontend contract close to the backend contract became an important
-part of the implementation, not just a small cleanup task.
+There was also a cross-page problem. Contest metadata, participant state, problem data, and
+submission data were used in several places. If one shared assumption was wrong, the issue could
+appear on a different page later in the workflow.
 
-== Challenges and Issues Faced
+These difficulties changed the implementation strategy. Instead of letting each page handle its own
+request and validation logic, the frontend moved toward shared service modules, shared schemas, and
+clearer route-level responsibilities.
 
-One recurring challenge was the gap between sample data and real backend data. Early frontend work
-was often done with fixed or simplified values so that the page structure could be built first.
-This made it easier to design and style the interface, but it also meant that some later issues
-only appeared when the frontend was connected to real responses. Fields that looked simple in a
-mocked example sometimes behaved differently in the actual backend payload.
+== Alignment with the Current Backend Contract
 
-Another challenge was keeping frontend state and contest state in sync. In a contest system, page
-state is not just local UI state. It is tied to time-sensitive actions such as joining a contest,
-leaving a contest, opening problems, and viewing submissions. If the frontend makes the wrong
-assumption about contest status, the user can end up seeing an interface that looks valid but no
-longer matches the real backend state.
+In the later stage of the project, one important task was fixing mismatches between frontend
+assumptions and the current backend contract. For example, the frontend profile request used an
+outdated path and had to be changed to the backend's current `/me` endpoint. Contest-related types
+also had to be updated to match real backend fields, including `left_contest` and the structure of
+the `participants` response.
 
-Dark mode and layout consistency created a different kind of challenge. Once the platform supported
-multiple themes, every page needed to be checked again for contrast, background colors, and shared
-components. A layout that looked acceptable in light mode could become awkward in dark mode,
-especially around cards, forms, and table-like sections. This was one reason why shared layout
-patterns became important in the later stage of the project.
+These issues were important because a page can still compile and render even when it depends on an
+outdated route or field name. The problem may only appear when a user tries to view a profile, join
+a contest, or submit code.
 
-There was also the issue of gradual refinement. Many pages were first built to be functional, and
-only later polished for readability and consistency. This is normal in frontend work, but it means
-the codebase changes in two directions at once: one part focuses on correct behavior, while another
-part focuses on presentation and user experience. Balancing these two goals took time, especially
-because a visual improvement on one page often suggested similar updates on several other pages.
+These problems also affected workflow correctness. An outdated profile route does not just break one
+request. It also weakens the assumption that authenticated identity is being handled in a consistent
+way. A missing contest-state field does not just affect typing. It can also make the frontend show
+actions that should no longer be available.
 
-== Validation and Stability
+#figure(
+  table(
+    columns: (1.1fr, 1.3fr, 2.1fr),
+    inset: 8pt,
+    stroke: luma(180),
+    [*Area*], [*Adjustment made*], [*Reason it mattered*],
+    [Profile retrieval], [Updated the request to use the backend's `/me` endpoint], [Ensured that
+    authenticated user information was fetched from the current backend route rather than an
+    outdated assumption.],
+    [Contest state typing], [Updated frontend types to include fields such as `left_contest`], [The
+    frontend needed these fields to interpret whether a participant could still access contest
+    actions correctly.],
+    [Participant-related responses], [Aligned the frontend with the actual `participants` response
+    structure], [Reduced the risk of route-level pages misreading contest participation data.],
+  ),
+  caption: [Examples of frontend-backend alignment work carried out during the project],
+)
 
-After these integration and interface changes, the frontend was checked through local build and
-type-level validation to confirm that the updated code remained consistent. This step is important
-in a React and TypeScript project because changes in one shared type, API method, or page-level
-prop can easily affect several other parts of the application.
+== Validation and Scenario-Based Evaluation
 
-The validation process was not only about confirming that the project could still compile. It also
-helped check whether the updated pages remained compatible with the shared service layer, routing
-structure, and reusable components already used across the frontend. In this kind of project,
-stability means that improvements should not create new inconsistencies elsewhere in the user flow.
+The project did not include a formal user study, so evaluation was based on engineering checks and
+scenario-based walkthroughs. I used three main forms of verification: local builds, TypeScript
+checks, and manual end-to-end testing of the main participant flow.
 
-This is especially relevant for a contest platform, where users move quickly between authentication,
-contest pages, problem pages, submissions, and supporting views. If one part of the frontend falls
-out of sync with another, the result may not always be an obvious crash, but rather a confusing
-workflow or incorrect interface state. For that reason, validation and stability checking formed an
-important part of the frontend work alongside feature implementation and visual refinement.
+These checks were chosen because they cover the parts of the system most likely to break when
+frontend and backend alignment changes. Build and type checks can catch obvious structural
+problems. Manual walkthroughs are still needed because many contest issues only appear when a user
+moves across several pages in sequence.
 
-In practice, this checking included more than one kind of validation. Local builds were used to
-confirm that the project still compiled, and TypeScript checks were used to catch mismatched props,
-request types, and data shapes after changes to shared modules. Manual checking was also important,
-because many frontend issues only appear when moving through real user flows such as login, joining
-a contest, opening a problem, submitting code, and returning to the results page.
+#figure(
+  table(
+    columns: (1.4fr, 1.2fr, 2fr),
+    inset: 8pt,
+    stroke: luma(180),
+    [*Scenario*], [*Validation approach*], [*Observed outcome*],
+    [Login and protected access], [Manual walkthrough and request verification], [Users could enter
+    the participant area after authentication, while invalid or missing authenticated state was
+    redirected back to login.],
+    [Contest discovery and entry], [Manual walkthrough of list, password dialog, and contest view],
+    [Contest metadata, state labels, and contest entry flow remained consistent after API-layer
+    changes.],
+    [Problem solving and draft persistence], [Manual walkthrough of problem page interactions],
+    [Problem data could be loaded, draft code could be preserved locally, and the user could remain
+    in a continuous read-code-submit workflow.],
+    [Submission and result navigation], [Manual walkthrough of create-submission flow], [A
+    successful submission could lead directly to the corresponding result page without breaking the
+    contest context.],
+    [Profile retrieval], [Route check after endpoint correction], [Profile data could be requested
+    through the updated backend contract rather than an outdated route.],
+    [Shared type and module consistency], [Local build and type-level validation], [Changes to
+    routes, request helpers, and shared types did not introduce immediate compile-time
+    inconsistencies.],
+  ),
+  caption: [Scenario-based validation used to check the revised participant frontend],
+)
 
-This combination of compile-time checks and manual flow testing was useful because the frontend is a
-connected system rather than a set of isolated pages. A small change to a shared service, route, or
-theme component can affect several other views. Verifying stability after each round of changes
-helped reduce the chance that a new improvement in one area would quietly break behavior in another.
+The selected scenarios match the main participant tasks discussed earlier: entering the system,
+joining a contest, opening a problem, preserving work, submitting a solution, viewing the result,
+and retrieving user information through the corrected backend route.
+
+== Limitations and Future Work
+
+Several limitations remain. The evaluation in this report is based on local validation and manual
+walkthroughs, not a formal usability study. Some screenshots were taken while parts of the backend
+were still being finalized. The report also focuses on the participant frontend, so it does not
+cover the full administrative or judging workflow.
+
+These limitations suggest clear future work:
+
+- Add automated end-to-end tests for key contest scenarios such as contest entry, submission, and
+  profile retrieval.
+- Conduct structured usability evaluation with student participants during realistic contest tasks.
+- Extend live integration testing as more backend features stabilize.
+- Continue refining participant-facing feedback for error states, contest status changes, and
+  clarification updates.
