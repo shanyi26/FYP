@@ -3,12 +3,12 @@
 == UI/UX Design with Figma
 
 Before implementation, I used Figma @figma to plan the participant interface and the main user
-flow. This stage was not only for visual mockups. It was also used to check whether the workflow
-could support contest use without too much page switching or confusing interaction patterns. By
-deciding the placement of navigation, cards, forms, headers, and content areas early, I reduced
-the amount of structural rework needed during React implementation.
+flow. I did not use this stage just to make visual mockups. I also used it to check whether the
+workflow could support contest use without too much page switching or confusing interaction
+patterns. By deciding the placement of navigation, cards, forms, headers, and content areas early,
+I reduced the amount of structural rework needed during React implementation.
 
-The Figma stage also helped separate two questions: what information a page should show, and how
+The Figma stage also helped me separate two questions: what information a page should show, and how
 that information should be arranged so that users can act on it quickly. This was important because
 contest users often move between statements, clarifications, submissions, and code editing under
 time pressure.
@@ -24,7 +24,7 @@ time pressure.
     figma-shot("fig/figma/Sign Up.png"),
   ),
   caption: [Figma designs for the authentication flow],
-)
+) <fig:figma-auth-flow>
 
 #figure(
   kind: image,
@@ -33,8 +33,8 @@ time pressure.
     gutter: 0.6cm,
     figma-shot("fig/figma/Contest Page.png"),
   ),
-  caption: [Figma design for the contest overview page],
-)
+  caption: [Figma design for the contest detail page],
+) <fig:figma-contest-detail>
 
 #figure(
   kind: image,
@@ -44,8 +44,9 @@ time pressure.
     figma-shot("fig/figma/Problem.png"),
     figma-shot("fig/figma/Problem Page.png"),
   ),
-  caption: [Figma designs for problem browsing and problem solving],
-)
+  caption: [Figma designs for the problem-solving page (left) and the contest problem list page
+  (right)],
+) <fig:figma-problem-pages>
 
 #figure(
   kind: image,
@@ -54,8 +55,8 @@ time pressure.
     gutter: 0.6cm,
     figma-shot("fig/figma/Submission Page.png"),
   ),
-  caption: [Figma design for submission tracking],
-)
+  caption: [Figma design for the submission list page],
+) <fig:figma-submission-page>
 
 #figure(
   kind: image,
@@ -65,11 +66,14 @@ time pressure.
     figma-shot("fig/figma/FAQ.png"),
     figma-shot("fig/figma/My Account.png"),
   ),
-  caption: [Figma designs for supporting participant pages],
-)
+  caption: [Figma designs for the FAQ page (left) and the profile page (right)],
+) <fig:figma-faq-profile>
 
-These designs set the basic page templates later reused across the frontend. They do not show every
-implementation detail, but they do show the intended information order and route flow.
+These designs set the basic page templates later reused across the frontend. The authentication flow
+is shown in @fig:figma-auth-flow. The contest detail page is shown in
+@fig:figma-contest-detail. The problem-solving page and contest problem list page are shown in
+@fig:figma-problem-pages. The submission list page is shown in @fig:figma-submission-page. The FAQ
+page and profile page are shown in @fig:figma-faq-profile.
 
 == Layout and Interaction Rationale
 
@@ -81,13 +85,15 @@ The frontend uses a stable application frame with persistent navigation. This re
 moving between contest pages because users do not need to find the main actions again on every
 screen. It also helps users keep one clear view of the full contest workflow.
 
-The contest overview keeps the problem list and clarification area on the same page. These two
-parts are often used together during a contest. If they were split too much, users would need more
-page changes.
+The contest detail page in @fig:figma-contest-detail keeps the problem list and
+clarification area on the same page. These two parts are often used together during a contest. If
+they were split too much, users would need more page changes.
 
-The problem page uses a split layout so that reading and coding stay close together. Participants
-often move between the statement, the examples, and the editor. A split layout makes this easier.
-It does reduce horizontal space, so the layout has to stay simple.
+The problem-solving page in @fig:figma-problem-pages uses a split layout so that reading and
+coding stay close together. Participants often move between the statement, the examples, and the
+editor. A split layout makes this easier. It does reduce horizontal space, so the layout has to
+stay simple. This choice mainly fits laptop or desktop use during contests. If the statement area
+gets too narrow, the layout is less comfortable.
 
 The design also includes theme and font-size options. These are not only visual features. Contest
 pages can contain long statements, dense tables, and many clarifications, so users may need a page
@@ -95,7 +101,7 @@ that is easier to read on different screens and in different lighting conditions
 
 These choices also involve trade-offs. A persistent sidebar uses some screen space, but it gives
 better navigation across many pages. A split problem layout leaves less horizontal room, but it
-works better for the read-code cycle during problem solving.
+fits the read-code cycle better during problem solving.
 
 The basic preference logic is handled in a shared theme provider, which restores the selected mode
 and font-size setting from local storage.
@@ -154,17 +160,17 @@ The controls are also shared so that the same interaction can be reused across t
 
 The frontend is a React @react and TypeScript @typescript single-page application built with Vite
 @vite. This stack fits the project because the system needs route-based navigation, reusable
-components, and steady UI development. React Router models contest-scoped routes. Material UI and
-Emotion provide a common design base and theme support.
+components, and steady UI development. React Router @react-router models contest-scoped routes.
+Material UI @mui and Emotion @emotion provide a common design base and theme support.
 
-For backend communication, the project uses Axios through a centralized API service layer with
-request and response interceptors. Zod is used with TypeScript so that backend payloads can be
-checked at runtime, not only described at compile time. This is useful because many participant
-pages depend on backend data that can change during development.
+For backend communication, the project uses Axios @axios through a centralized API service layer
+with request and response interceptors. Zod @zod is used with TypeScript so that backend payloads
+can be checked at runtime, not only described at compile time. This is useful because many
+participant pages depend on backend data that can change during development.
 
-The project also uses Monaco Editor for code submission and React Markdown with `remark-gfm` and
-syntax highlighting for problem statements. These tools support the two main tasks on the
-participant side: reading technical content and writing code.
+The project also uses Monaco Editor @monaco-editor for code submission and React Markdown
+@react-markdown with `remark-gfm` and syntax highlighting for problem statements. These tools
+support the two main tasks on the participant side: reading technical content and writing code.
 
 These choices also involve trade-offs. Request logic could have been kept inside each page, but
 that would make backend changes harder to track and could lead to different error handling on

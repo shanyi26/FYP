@@ -6,7 +6,7 @@ Online programming contests are widely used in computing education because they 
 problem solving, time pressure, and automatic judging. They are useful for competitive training,
 class activities, selection contests, and regular skills practice. Guides on running online
 contests also show that clear rules, reliable timing, and clear participant communication are
-important @aswell-online-contest.
+important @aswell-online-contest @icpc-rules-info.
 
 Many schools use external contest platforms. This is convenient, but it also means that workflow,
 branding, permissions, feature priority, and data ownership are shaped by systems built for general
@@ -14,16 +14,17 @@ use. For Nanyang Programming Contests, a school-owned platform is a better fit b
 adjusted to local contest formats and school needs.
 
 NanyangOJ is meant to serve that role. At the system level, it supports problem management,
-clarifications, scoring rules, and contest operation. This report only focuses on one part of the
-system: the participant frontend. This frontend takes users from login to contest participation and
-supports contest pages, problem pages, submissions, clarifications, rankings, and account pages.
+clarifications, scoring rules, and contest operation. In this report, I only focus on one part of
+the system: the participant frontend. This frontend takes users from login to contest
+participation and supports contest pages, problem pages, submissions, clarifications, rankings, and
+account pages.
 
 == Existing Platforms and Design Implications
 
 Before starting the frontend design, I looked at several existing contest platforms, including
-Vjudge @vjudge, Kattis @kattis, CMS @cms, and Codeforces @codeforces. The goal was not to copy one
-platform. The goal was to see which strengths were useful and which gaps a school-owned system
-still needed to address.
+Vjudge @vjudge, Kattis @kattis, CMS @cms-official, and Codeforces @codeforces. I was not trying to
+copy one platform directly. I mainly wanted to see which strengths were useful and which gaps a
+school-owned system still needed to cover.
 
 #figure(
   table(
@@ -54,15 +55,15 @@ This work has two main motivations. First, a school-owned contest system gives t
 control over contest access, interface behavior, branding, and future development. Second, the
 participant interface must still work well when backend behavior changes over time.
 
-In this report, the frontend is not treated as only a visual layer. In a contest system, the
-frontend must turn backend state into correct user actions. Contest status, problem access,
+In this report, the frontend is not treated as just a visual layer. In a contest system, the
+frontend has to turn backend state into correct user actions. Contest status, problem access,
 submission results, clarifications, and account state all depend on correct routing, request
 handling, and response handling.
 
 This is one of the main technical difficulties in the project. A page can look complete and still
-behave in the wrong way if its route logic, state assumptions, or expected response fields no
-longer match the backend contract. So the frontend had to be judged not only by how it looked, but
-also by how correctly it handled contest state.
+behave in the wrong way if its route logic, state assumptions, or expected response fields do not
+match the backend contract anymore. So I could not judge the frontend only by how it looked. I
+also had to check whether it handled contest state in the right way.
 
 == Project Objectives
 
@@ -78,7 +79,7 @@ The frontend work in this project has five objectives:
 - To improve frontend correctness by matching routes, requests, and response typing to the current
   backend contract.
 
-The participant workflow covered by these objectives is shown in Figure @fig:participant-workflow.
+The participant workflow covered by these objectives is shown in @fig:participant-workflow.
 
 #figure(
   image("fig/participant-workflow.svg", width: 100%),

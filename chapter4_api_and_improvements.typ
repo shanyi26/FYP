@@ -1,4 +1,4 @@
-= API Integration, Validation, and Refinement
+= API Integration, Verification, and Refinement
 
 == Usability and Consistency Refinements
 
@@ -16,13 +16,16 @@ can contain a lot of text and may be used for a long time.
   kind: image,
   image("fig/dark/light1.png", width: 100%),
   caption: [Light theme example],
-)
+) <fig:light-theme-example>
 
 #figure(
   kind: image,
   image("fig/dark/dark1.png", width: 100%),
   caption: [Dark theme example],
-)
+) <fig:dark-theme-example>
+
+The light theme is shown in @fig:light-theme-example. The dark theme is shown in
+@fig:dark-theme-example.
 
 === Shared Page Structure
 
@@ -72,9 +75,10 @@ simple frontend-facing messages.
   caption: [Code excerpt showing the Axios interceptor setup for authenticated requests],
 )
 
-This structure keeps page components simpler. Pages such as the contest list page and contest
-detail page can call high-level methods, while HTTP methods, path formatting, authentication
-headers, and response validation stay in shared modules.
+This structure keeps page components simpler. Pages such as the contest list page
+(@fig:contest-list-page) and contest detail page (@fig:contest-detail-page) can call
+high-level methods, while HTTP methods, path formatting, authentication headers, and response
+validation stay in shared modules.
 
 The service layer also handles error normalization. Backend error codes are not always suitable for
 direct display, so the frontend maps them to simpler messages.
@@ -237,9 +241,9 @@ actions that should no longer be available.
   caption: [Examples of frontend-backend alignment work carried out during the project],
 )
 
-== Validation and Scenario-Based Evaluation
+== Verification and Scenario-Based Checks
 
-The project did not include a formal user study, so evaluation was based on engineering checks and
+The project did not include a formal user study, so this part was based on engineering checks and
 scenario-based walkthroughs. I used three main forms of verification: local builds, TypeScript
 checks, and manual end-to-end testing of the main participant flow.
 
@@ -253,26 +257,27 @@ moves across several pages in sequence.
     columns: (1.4fr, 1.2fr, 2fr),
     inset: 8pt,
     stroke: luma(180),
-    [*Scenario*], [*Validation approach*], [*Observed outcome*],
+    [*Scenario*], [*Verification approach*], [*Observed outcome*],
     [Login and protected access], [Manual walkthrough and request verification], [Users could enter
     the participant area after authentication, while invalid or missing authenticated state was
     redirected back to login.],
     [Contest discovery and entry], [Manual walkthrough of list, password dialog, and contest view],
     [Contest metadata, state labels, and contest entry flow remained consistent after API-layer
     changes.],
-    [Problem solving and draft persistence], [Manual walkthrough of problem page interactions],
+    [Problem solving and draft persistence], [Manual walkthrough of the problem page
+    (@fig:problem-page) interactions],
     [Problem data could be loaded, draft code could be preserved locally, and the user could remain
     in a continuous read-code-submit workflow.],
     [Submission and result navigation], [Manual walkthrough of create-submission flow], [A
-    successful submission could lead directly to the corresponding result page without breaking the
-    contest context.],
+    successful submission could lead directly to the corresponding result page
+    (@fig:submission-result-page) without breaking the contest context.],
     [Profile retrieval], [Route check after endpoint correction], [Profile data could be requested
     through the updated backend contract rather than an outdated route.],
     [Shared type and module consistency], [Local build and type-level validation], [Changes to
     routes, request helpers, and shared types did not introduce immediate compile-time
     inconsistencies.],
   ),
-  caption: [Scenario-based validation used to check the revised participant frontend],
+  caption: [Scenario-based verification used to check the revised participant frontend],
 )
 
 The selected scenarios match the main participant tasks discussed earlier: entering the system,

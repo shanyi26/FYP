@@ -26,6 +26,9 @@
   radius: 6pt,
 )
 
+// Put table captions above tables
+#show figure.where(kind: table): set figure.caption(position: top)
+
 // Heading styles (chapter-like for level 1)
 #show heading.where(level: 1): it => {
   pagebreak(weak: true)
